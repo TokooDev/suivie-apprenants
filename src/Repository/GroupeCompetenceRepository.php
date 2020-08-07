@@ -22,19 +22,17 @@ class GroupeCompetenceRepository extends ServiceEntityRepository
     // /**
     //  * @return GroupeCompetence[] Returns an array of GroupeCompetence objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function getGrpeCompetencesRefs()
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
+            ->innerJoin('g.referentiels', 'r')
             ->orderBy('g.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?GroupeCompetence

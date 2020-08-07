@@ -7,10 +7,49 @@ use App\Repository\ProfilRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * collectionOperations = {
+ *      "getprofils" = {
+ *          "path" = "/admin/profils/",
+ *          "method"="GET",
+ * 
+ *       },
+ *       "create_profils"={
+ *           "method"= "POST",
+ *           "path" = "/admin/profils",
+ *       },
+ * },
+ * itemOperations={
+ *      "get_one_profil"={
+ *             "method"="GET",
+ *             "path" = "/admin/profils/{id}",
+ *             
+ *      },
+ * "delete_profil"={
+ *             "method"="DELETE",
+ *             "path" = "/admin/profils/{id}",
+ *      },
+ *      "edit_profil"={
+ *             "method"="PUT",
+ *             "path" = "/admin/profils/{id}",
+ *      }
+ * },
+ *          attributes = {
+ *               "security" = "is_granted('ROLE_ADMIN')",
+ *               "security_message" = "Accès refusé!",
+ *               "pagination_items_per_page"=2,
+ *               
+ * 
+ * 
+ *     
+ *      
+ *  },)
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
+ * CollectionOperation
  */
 class Profil
 {
@@ -28,6 +67,7 @@ class Profil
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil")
+     * @ApiSubresource
      */
     private $users;
 

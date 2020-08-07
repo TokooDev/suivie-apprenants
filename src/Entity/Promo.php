@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PromoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -58,6 +60,22 @@ class Promo
      * @ORM\Column(type="date", nullable=true)
      */
     private $dateFin;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="Promo")
+     */
+    private $apprenants;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="Promo")
+     */
+    private $referentiels;
+
+    public function __construct()
+    {
+        $this->apprenants = new ArrayCollection();
+        $this->referentiels = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -156,6 +174,65 @@ class Promo
     public function setDateFin(?\DateTimeInterface $dateFin): self
     {
         $this->dateFin = $dateFin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Apprenant[]
+     */
+    public function getApprenants(): Collection
+    {
+        return $this->apprenants;
+    }
+
+    public function addApprenant(Apprenant $apprenant): self
+    {
+        if (!$this->apprenants->contains($apprenant)) {
+            $this->apprenants[] = $apprenant;
+            $apprenant->setPromo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApprenant(Apprenant $apprenant): self
+    {
+        if ($this->apprenants->contains($apprenant)) {
+            $this->apprenants->removeElement($apprenant);
+            // set the owning side to null (unless already changed)
+            if ($apprenant->getPromo() === $this) {
+                $apprenant->setPromo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Referentiel[]
+     */
+    public function getReferentiels(): Collection
+    {
+        return $this->referentiels;
+    }
+
+    public function addReferentiel(Referentiel $referentiel): self
+    {
+        if (!$this->referentiels->contains($referentiel)) {
+            $this->referentiels[] = $referentiel;
+            $referentiel->addPromo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferentiel(Referentiel $referentiel): self
+    {
+        if ($this->referentiels->contains($referentiel)) {
+            $this->referentiels->removeElement($referentiel);
+            $referentiel->removePromo($this);
+        }
 
         return $this;
     }

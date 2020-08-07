@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FormateurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,6 +26,16 @@ class Formateur
      */
     private $libele;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="formateur")
+     */
+    private $Groupe;
+
+    public function __construct()
+    {
+        $this->Groupe = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -37,6 +49,37 @@ class Formateur
     public function setLibele(?string $libele): self
     {
         $this->libele = $libele;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Groupe[]
+     */
+    public function getGroupe(): Collection
+    {
+        return $this->Groupe;
+    }
+
+    public function addGroupe(Groupe $groupe): self
+    {
+        if (!$this->Groupe->contains($groupe)) {
+            $this->Groupe[] = $groupe;
+            $groupe->setFormateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Groupe $groupe): self
+    {
+        if ($this->Groupe->contains($groupe)) {
+            $this->Groupe->removeElement($groupe);
+            // set the owning side to null (unless already changed)
+            if ($groupe->getFormateur() === $this) {
+                $groupe->setFormateur(null);
+            }
+        }
 
         return $this;
     }

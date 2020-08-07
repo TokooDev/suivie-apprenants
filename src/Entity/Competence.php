@@ -7,6 +7,7 @@ use App\Repository\CompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ApiResource()
@@ -32,19 +33,21 @@ class Competence
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="competence")
+     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="competences")
+     * @ApiSubresource
      */
-    private $apprenants;
+    private $GroupeCompetence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=NiveauEvaluation::class, inversedBy="competences")
+     * @ApiSubresource
      */
-    private $tag;
+    private $NiveauEvaluation;
 
     public function __construct()
     {
-        $this->apprenants = new ArrayCollection();
-        $this->tag = new ArrayCollection();
+        $this->GroupeCompetence = new ArrayCollection();
+        $this->NiveauEvaluation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,56 +80,57 @@ class Competence
     }
 
     /**
-     * @return Collection|Apprenant[]
+     * @return Collection|GroupeCompetence[]
      */
-    public function getApprenants(): Collection
+    public function getGroupeCompetence(): Collection
     {
-        return $this->apprenants;
+        return $this->GroupeCompetence;
     }
 
-    public function addApprenant(Apprenant $apprenant): self
+    public function addGroupeCompetence(GroupeCompetence $groupeCompetence): self
     {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->addCompetence($this);
+        if (!$this->GroupeCompetence->contains($groupeCompetence)) {
+            $this->GroupeCompetence[] = $groupeCompetence;
         }
 
         return $this;
     }
 
-    public function removeApprenant(Apprenant $apprenant): self
+    public function removeGroupeCompetence(GroupeCompetence $groupeCompetence): self
     {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            $apprenant->removeCompetence($this);
+        if ($this->GroupeCompetence->contains($groupeCompetence)) {
+            $this->GroupeCompetence->removeElement($groupeCompetence);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Tag[]
+     * @return Collection|NiveauEvaluation[]
      */
-    public function getTag(): Collection
+    public function getNiveauEvaluation(): Collection
     {
-        return $this->tag;
+        return $this->NiveauEvaluation;
     }
 
-    public function addTag(Tag $tag): self
+    public function addNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
+        if (!$this->NiveauEvaluation->contains($niveauEvaluation)) {
+            $this->NiveauEvaluation[] = $niveauEvaluation;
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
     {
-        if ($this->tag->contains($tag)) {
-            $this->tag->removeElement($tag);
+        if ($this->NiveauEvaluation->contains($niveauEvaluation)) {
+            $this->NiveauEvaluation->removeElement($niveauEvaluation);
         }
 
         return $this;
     }
+
+   
+    
 }

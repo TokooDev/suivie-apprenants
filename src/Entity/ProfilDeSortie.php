@@ -27,7 +27,7 @@ class ProfilDeSortie
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profildesortie")
+     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="ProfilDeSortie")
      */
     private $apprenants;
 
@@ -35,6 +35,8 @@ class ProfilDeSortie
     {
         $this->apprenants = new ArrayCollection();
     }
+
+   
 
     public function getId(): ?int
     {
@@ -65,7 +67,7 @@ class ProfilDeSortie
     {
         if (!$this->apprenants->contains($apprenant)) {
             $this->apprenants[] = $apprenant;
-            $apprenant->setProfildesortie($this);
+            $apprenant->setProfilDeSortie($this);
         }
 
         return $this;
@@ -76,11 +78,13 @@ class ProfilDeSortie
         if ($this->apprenants->contains($apprenant)) {
             $this->apprenants->removeElement($apprenant);
             // set the owning side to null (unless already changed)
-            if ($apprenant->getProfildesortie() === $this) {
-                $apprenant->setProfildesortie(null);
+            if ($apprenant->getProfilDeSortie() === $this) {
+                $apprenant->setProfilDeSortie(null);
             }
         }
 
         return $this;
     }
+
+   
 }

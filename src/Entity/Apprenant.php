@@ -52,13 +52,27 @@ class Apprenant
     private $profildesortie;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="apprenants")
+     * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
      */
-    private $competence;
+    private $Groupe;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
+     */
+    private $ProfilDeSortie;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
+     */
+    private $Promo;
+
+    
+   
 
     public function __construct()
     {
         $this->competence = new ArrayCollection();
+        $this->Groupe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,28 +153,42 @@ class Apprenant
     }
 
     /**
-     * @return Collection|Competence[]
+     * @return Collection|Groupe[]
      */
-    public function getCompetence(): Collection
+    public function getGroupe(): Collection
     {
-        return $this->competence;
+        return $this->Groupe;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupe(Groupe $groupe): self
     {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
+        if (!$this->Groupe->contains($groupe)) {
+            $this->Groupe[] = $groupe;
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupe(Groupe $groupe): self
     {
-        if ($this->competence->contains($competence)) {
-            $this->competence->removeElement($competence);
+        if ($this->Groupe->contains($groupe)) {
+            $this->Groupe->removeElement($groupe);
         }
 
         return $this;
     }
+
+    public function getPromo(): ?Promo
+    {
+        return $this->Promo;
+    }
+
+    public function setPromo(?Promo $Promo): self
+    {
+        $this->Promo = $Promo;
+
+        return $this;
+    }
+
+    
 }

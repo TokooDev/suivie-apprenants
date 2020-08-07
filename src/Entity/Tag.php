@@ -27,14 +27,16 @@ class Tag
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity=GroupeTag::class, inversedBy="tags")
      */
-    private $competences;
+    private $GroupeTag;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+        $this->GroupeTag = new ArrayCollection();
     }
+
+   
 
     public function getId(): ?int
     {
@@ -54,30 +56,30 @@ class Tag
     }
 
     /**
-     * @return Collection|Competence[]
+     * @return Collection|GroupeTag[]
      */
-    public function getCompetences(): Collection
+    public function getGroupeTag(): Collection
     {
-        return $this->competences;
+        return $this->GroupeTag;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupeTag(GroupeTag $groupeTag): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
-            $competence->addTag($this);
+        if (!$this->GroupeTag->contains($groupeTag)) {
+            $this->GroupeTag[] = $groupeTag;
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupeTag(GroupeTag $groupeTag): self
     {
-        if ($this->competences->contains($competence)) {
-            $this->competences->removeElement($competence);
-            $competence->removeTag($this);
+        if ($this->GroupeTag->contains($groupeTag)) {
+            $this->GroupeTag->removeElement($groupeTag);
         }
 
         return $this;
     }
+
+    
 }
