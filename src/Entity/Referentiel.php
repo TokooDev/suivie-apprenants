@@ -13,24 +13,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  * 
- *      normalizationContext={"groups"={"referentiel:read"}},
- *      attributes={
- *          "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *          "security_message"="ACCES REFUSE"
- *      },
  *      collectionOperations={
  *          "getReferentiel"={
  *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
  *              "security_message"="ACCES REFUSE",
  *              "method"="GET",
  *              "path"="/admin/referentiels",
- *              "normalizationContext"={"groups"={"referentiel:read"}},
- * 
- *               
+ *              "normalization_context"={"groups"={"ref_grpe:read"}}, 
  *          }, 
- *          
- * 
- * 
+ *          "getGC"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/referentiels/groupecompetences",
+ *              "normalization_context"={"groups"={"competence:read"}},  
+ *   
+ *          }, 
  *      }, 
  *      
  * 
@@ -46,37 +44,43 @@ class Referentiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     * 
      */
     private $libele;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     * 
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     * 
      */
     private $programme;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     * 
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read"})
+     * 
      */
     private $critereAdmission;
 
@@ -88,7 +92,8 @@ class Referentiel
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
      * @ApiSubresource
-     * @Groups({"referentiel:read"})
+     * @Groups({"ref_grpe:read", "competence:read"})
+     * 
      */
     private $GroupeCompetence;
 

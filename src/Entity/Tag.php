@@ -2,14 +2,29 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\TagRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TagRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+
+ *
+ *      collectionOperations={
+ *          "createTag"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/grptag",
+ *              
+ *          },
+ *
+ * 
+ * 
+ * },)
  * @ORM\Entity(repositoryClass=TagRepository::class)
  */
 class Tag
@@ -18,16 +33,19 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"groupetag:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"groupetag:read"})
      */
     private $libelle;
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeTag::class, inversedBy="tags")
+     
      */
     private $GroupeTag;
 

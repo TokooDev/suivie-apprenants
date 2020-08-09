@@ -2,14 +2,50 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupeTagRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\GroupeTagRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  normalizationContext={"groups"={"groupetag:read"}},
+ *
+ *      collectionOperations={
+ *          "getTag"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/grptag",
+ *              
+ * 
+ * 
+ *               
+ *          },
+ *          
+ * 
+ * },
+ * itemOperations={
+ *      "getTagGrp"={
+ *          "method"= "GET",
+ *          "path"= "/admin/grptag/{id}",   
+ *      },
+ *      "getGpTag"={
+ *          "method"= "GET",
+ *          "path"= "/admin/grptag/{id}/tag",   
+ *      },
+ *      "ajouttag"={
+ *             "method"="PUT",
+ *             "path" = "/admin/grptag/{id}",
+ *      },
+ *      "delete_profil"={
+ *             "method"="DELETE",
+ *             "path" = "/admin/grptag/{id}",
+ *      },
+ * 
+ * },)
  * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  */
 class GroupeTag
@@ -18,16 +54,19 @@ class GroupeTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"groupetag:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"groupetag:read"})
      */
     private $libele;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="GroupeTag")
+     * @Groups({"groupetag:read"})
      */
     private $tags;
 

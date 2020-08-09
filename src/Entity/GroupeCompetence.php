@@ -2,26 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GroupeCompetenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- * collectionOperations={
- *       "getgroupecompetence"={
- *               "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *               "security_message"="ACCES REFUSE",
- *               "method"="GET",
- *               "route_name"="grpecompetences_referentiels",
- *               "path"="/api/admin/referentiels/groupecompetences",
- *               "normalizationContext"={"groups"={"referentiel:read"}},
- * 
- * }
- * })
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
  */
 class GroupeCompetence
@@ -30,27 +20,37 @@ class GroupeCompetence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"ref_grpe:read","competence:read"})
+     * 
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"ref_grpe:read","competence:read"})
+     * 
      */
     private $libele;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"ref_grpe:read","competence:read"})
+     *
      */
     private $descriptif;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="GroupeCompetence")
+     *
      */
     private $referentiels;
 
     /**
      * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="GroupeCompetence")
      * @ApiSubresource
+     * @Groups({"ref_grpe:read","competence:read"})
+     * 
      */
     private $competences;
 
