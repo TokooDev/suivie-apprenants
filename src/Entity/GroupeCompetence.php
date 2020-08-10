@@ -29,7 +29,7 @@ class GroupeCompetence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"ref_grpe:read","competence:read"})
+     * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      * 
      * 
      */
@@ -37,14 +37,14 @@ class GroupeCompetence
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","competence:read"})
+     * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      * 
      */
     private $libele;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","competence:read"})
+     * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      *
      */
     private $descriptif;
@@ -58,7 +58,7 @@ class GroupeCompetence
     /**
      * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="GroupeCompetence")
      * @ApiSubresource
-     * @Groups({"ref_grpe:read","competence:read"})
+     * @Groups({"ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read"})
      * 
      */
     private $competences;

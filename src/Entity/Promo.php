@@ -10,7 +10,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  collectionOperations={
+ *          "getPromo"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/promos",
+ *              "normalization_context"={"groups"={"promo:read"}}, 
+ *          }, 
+ *          "getPromoPrincipal"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/promos",
+ *              "normalization_context"={"groups"={"promoprincipal:read"}}, 
+ *          }, 
+ * },)
  * @ORM\Entity(repositoryClass=PromoRepository::class)
  */
 class Promo
@@ -19,43 +35,43 @@ class Promo
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $titre;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $referenceAgate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $fabrique;
 
@@ -67,19 +83,20 @@ class Promo
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $dateFin;
 
     /**
      * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="Promo")
+     * @Groups({"promo:read"})
      * 
      */
     private $apprenants;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="Promo")
-     * @Groups({"grpe:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $referentiels;
 

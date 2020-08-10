@@ -19,14 +19,14 @@ class Formateur
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grpe:read","apfor:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read"})
      * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read","apfor:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read"})
      * 
      */
     private $libele;
@@ -35,6 +35,34 @@ class Formateur
      * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="formateur")
      */
     private $groupes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read","apfor:read"})
+     */
+    private $nom;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read","apfor:read"})
+     */
+    private $prenom;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read","apfor:read"})
+     */
+    private $username;
 
     public function __construct()
     {
@@ -87,6 +115,66 @@ class Formateur
             $this->groupes->removeElement($groupe);
             $groupe->removeFormateur($this);
         }
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
 
         return $this;
     }

@@ -26,13 +26,13 @@ class Competence
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"competence:read"})
+     * @Groups({"competence:read","grpco:read","grpcom:read","afficherGr:read","affiGr:write","grpcom:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"competence:read"})
+     * @Groups({"competence:read","grpco:read","grpcom:read","afficherGr:read","affiGr:write","grpcom:write"})
      */
     private $description;
 

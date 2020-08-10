@@ -52,7 +52,7 @@ class Groupe
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grpe:read","apfor:read"})
+     * @Groups({"grpe:read","apfor:read",})
      */
     private $id;
 
@@ -60,7 +60,7 @@ class Groupe
 
     /**
      * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="groupes")
-     * @Groups({"grpe:read","apfor:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read"})
      */
     private $formateur;
 
@@ -75,6 +75,16 @@ class Groupe
      * @Groups({"grpe:read","apfor:read"})
      */
     private $apprenant;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $projet;
 
     
 
@@ -153,6 +163,30 @@ class Groupe
         if ($this->apprenant->contains($apprenant)) {
             $this->apprenant->removeElement($apprenant);
         }
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getProjet(): ?string
+    {
+        return $this->projet;
+    }
+
+    public function setProjet(?string $projet): self
+    {
+        $this->projet = $projet;
 
         return $this;
     }

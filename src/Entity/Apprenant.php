@@ -19,40 +19,39 @@ class Apprenant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grpe:read","grap:read","apfor:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"grpe:read","grap:read","apfor:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"grpe:read","apfor:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read"})
      * 
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"grpe:read","grap:read","apfor:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"grpe:read","grap:read","apfor:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $tel;
     /**
      * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
-     * @Groups({"grpe:read","grap:read","apfor:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $profildesortie;
-
     
 
     /**
@@ -68,6 +67,7 @@ class Apprenant
 
     /**
      * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="apprenant")
+     * @Groups({"promo:read"})
      */
     private $groupes;
 

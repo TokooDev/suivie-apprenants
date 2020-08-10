@@ -29,20 +29,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "normalization_context"={"groups"={"competence:read"}},  
  *   
  *          }, 
+ *         "getGroupCompetence"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"= "POST",
+ *              "path"= "/admin/referentiels", 
+ *              "normalization_context"={"groups"={"affiGr:write"}},  
+ *      },
  *         
  *      }, 
  * itemOperations={
+ * 
  *      "getGroup"={
+ *          "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *          "security_message"="ACCES REFUSE",
  *          "method"= "GET",
- *          "path"= "/admin/referentiels/{id}",   
+ *          "path"= "/admin/referentiels/{id}", 
+ *          "normalization_context"={"groups"={"afficherGr:read"}},  
  *      },
  *      "getCompetenceGroupe"={
  *          "method"= "GET",
- *          "path"= "/admin/referentiels/{id}/groupecompetences",   
+ *          "path"= "/admin/referentiels/{id}/groupecompetences",
+ *          "normalization_context"={"groups"={"grpco:read"}},   
  *      },
  *      "ajoutgrpeCompetence"={
  *             "method"="PUT",
  *             "path" = "/admin/referentiels/{id}",
+ *             "normalization_context"={"groups"={"grpcom:write"}},
  *      },
  *      "delete_profil"={
  *             "method"="DELETE",
@@ -58,42 +71,42 @@ class Referentiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $libele;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $programme;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $critereAdmission;
@@ -106,7 +119,7 @@ class Referentiel
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
      * @ApiSubresource
-     * @Groups({"ref_grpe:read", "competence:read"})
+     * @Groups({"ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read","affiGr:write"})
      * 
      */
     private $GroupeCompetence;
