@@ -3,22 +3,31 @@ security:
         App\Entity\User:
             algorithm: auto
 
+<<<<<<< HEAD
 
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
+=======
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers: 
+>>>>>>> master
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: username
+<<<<<<< HEAD
         # used to reload user from session & other features (e.g. switch_user)
         # used to reload user from session & other features (e.g. switch_user)
+=======
+>>>>>>> master
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         login:
+<<<<<<< HEAD
             pattern:  ^/api/login
             stateless: true
             anonymous: false
@@ -35,6 +44,27 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator   
+=======
+          pattern:  ^/api/login
+          stateless: true
+          anonymous: true
+          json_login:
+             check_path: /api/login
+             success_handler: lexik_jwt_authentication.handler.authentication_success
+             failure_handler: lexik_jwt_authentication.handler.authentication_failure   
+        api:
+          pattern:   ^/api
+          stateless: true
+          anonymous: true
+          provider: app_user_provider
+          guard:
+            authenticators:
+             - lexik_jwt_authentication.jwt_token_authenticator
+        main:
+            anonymous: true
+            lazy: true
+            provider: app_user_provider
+>>>>>>> master
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -46,7 +76,14 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
+<<<<<<< HEAD
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/api, roles: IS_AUTHENTICATED_FULLY  }
         - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
+=======
+        - { path: ^/profil, roles: ROLE_ADMIN }
+        - { path: ^/user, roles: ROLE_ADMIN }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+>>>>>>> master

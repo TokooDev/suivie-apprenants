@@ -9,8 +9,27 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+<<<<<<< HEAD
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
+=======
+ * @ApiResource(
+ * collectionOperations = {
+ *      "getProfils" = {
+ *              "path" = "/profils/",
+ *              "method"= "GET",
+ *              
+ *       },
+ * },
+ *       attributes = {
+ *              "security" = "is_granted('ROLE_ADMIN')",
+ *              "security_message" = "Accès refusé!",
+ *              "pagination_items_per_page"=2
+ *       },
+ * )
+ * @ORM\Entity(repositoryClass=ProfilRepository::class)
+ *
+>>>>>>> master
  */
 class Profil
 {
