@@ -2,14 +2,29 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TagRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- *  @ApiResource()
+ * @ApiResource(
+ *
+ *      collectionOperations={
+ *          "createTag"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/grptag",
+
+ * 
+ * 
+ *               
+ *          }
+ * },
+ * )
  * @ORM\Entity(repositoryClass=TagRepository::class)
  */
 class Tag
@@ -18,22 +33,24 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *  @Groups({"groupetag:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"groupetag:read"})
      */
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity=GroupeTag::class, inversedBy="tags")
      */
-    private $competences;
+    private $groupeTag;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+        $this->groupeTag = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,30 +71,29 @@ class Tag
     }
 
     /**
-     * @return Collection|Competence[]
+     * @return Collection|GroupeTag[]
      */
-    public function getCompetences(): Collection
+    public function getGroupeTag(): Collection
     {
-        return $this->competences;
+        return $this->groupeTag;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupeTag(GroupeTag $groupeTag): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
-            $competence->addTag($this);
+        if (!$this->groupeTag->contains($groupeTag)) {
+            $this->groupeTag[] = $groupeTag;
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupeTag(GroupeTag $groupeTag): self
     {
-        if ($this->competences->contains($competence)) {
-            $this->competences->removeElement($competence);
-            $competence->removeTag($this);
+        if ($this->groupeTag->contains($groupeTag)) {
+            $this->groupeTag->removeElement($groupeTag);
         }
 
         return $this;
     }
+
 }

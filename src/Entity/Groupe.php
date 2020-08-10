@@ -3,16 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProfilDeSortieRepository;
+use App\Repository\GroupeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=ProfilDeSortieRepository::class)
+ * @ORM\Entity(repositoryClass=GroupeRepository::class)
  */
-class ProfilDeSortie
+class Groupe
 {
     /**
      * @ORM\Id()
@@ -22,14 +22,14 @@ class ProfilDeSortie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $libelle;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profilDeSortie")
+     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="Groupe")
      */
     private $apprenants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="Groupe")
+     */
+    private $formateur;
 
     public function __construct()
     {
@@ -39,18 +39,6 @@ class ProfilDeSortie
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLibelle(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): self
-    {
-        $this->libelle = $libelle;
-
-        return $this;
     }
 
     /**
@@ -65,7 +53,7 @@ class ProfilDeSortie
     {
         if (!$this->apprenants->contains($apprenant)) {
             $this->apprenants[] = $apprenant;
-            $apprenant->setProfilDeSortie($this);
+            $apprenant->addGroupe($this);
         }
 
         return $this;
@@ -75,11 +63,20 @@ class ProfilDeSortie
     {
         if ($this->apprenants->contains($apprenant)) {
             $this->apprenants->removeElement($apprenant);
-            // set the owning side to null (unless already changed)
-            if ($apprenant->getProfilDeSortie() === $this) {
-                $apprenant->setProfilDeSortie(null);
-            }
+            $apprenant->removeGroupe($this);
         }
+
+        return $this;
+    }
+
+    public function getFormateur(): ?Formateur
+    {
+        return $this->formateur;
+    }
+
+    public function setFormateur(?Formateur $formateur): self
+    {
+        $this->formateur = $formateur;
 
         return $this;
     }

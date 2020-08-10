@@ -1,14 +1,21 @@
 <?php
 
 namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * collectionOperations={
+ *      "create"={
+ *              "method"="POST",
+ *              "path"="/users",
+ *              "route_name"="create"
+ * }
+ * }
+ * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
@@ -25,9 +32,6 @@ class User implements UserInterface
      */
     private $username;
 
-    /**
-     * @ORM\Column(type="json")
-     */
     private $roles = [];
 
     /**
@@ -37,12 +41,12 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255)
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
@@ -57,16 +61,15 @@ class User implements UserInterface
     private $tel;
 
     /**
-     * 
-     * @ORM\Column(type="string", length=255)
-     */
-    private $avatar;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $profil;
+
+    /**
+     * @ORM\Column(type="blob")
+     */
+    private $Avatar;
 
     public function getId(): ?int
     {
@@ -97,7 +100,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_'.$this->profil->getLibelle();
 
         return array_unique($roles);
     }
@@ -189,17 +192,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
 
     public function getProfil(): ?Profil
     {
@@ -209,6 +201,18 @@ class User implements UserInterface
     public function setProfil(?Profil $profil): self
     {
         $this->profil = $profil;
+
+        return $this;
+    }
+
+    public function getAvatar()
+    {
+        return $this->Avatar;
+    }
+
+    public function setAvatar($Avatar): self
+    {
+        $this->Avatar = $Avatar;
 
         return $this;
     }

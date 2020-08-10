@@ -9,7 +9,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(* attributes={
+* "security"="is_granted('ROLE_ADMIN')",
+* "security_message"="Vous n'avez pas access à cette Ressource"
+* }
+)
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
 class Apprenant
@@ -22,12 +26,12 @@ class Apprenant
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255)
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
@@ -47,18 +51,25 @@ class Apprenant
     private $avatar;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
+     * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
      */
-    private $profildesortie;
+    private $Groupe;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="apprenants")
+     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
      */
-    private $competence;
+    private $profilDeSortie;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
+     */
+    private $Promo;
+
 
     public function __construct()
     {
         $this->competence = new ArrayCollection();
+        $this->Groupe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -139,27 +150,39 @@ class Apprenant
     }
 
     /**
-     * @return Collection|Competence[]
+     * @return Collection|Groupe[]
      */
-    public function getCompetence(): Collection
+    public function getGroupe(): Collection
     {
-        return $this->competence;
+        return $this->Groupe;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupe(Groupe $groupe): self
     {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
+        if (!$this->Groupe->contains($groupe)) {
+            $this->Groupe[] = $groupe;
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupe(Groupe $groupe): self
     {
-        if ($this->competence->contains($competence)) {
-            $this->competence->removeElement($competence);
+        if ($this->Groupe->contains($groupe)) {
+            $this->Groupe->removeElement($groupe);
         }
+
+        return $this;
+    }
+
+    public function getPromo(): ?Promo
+    {
+        return $this->Promo;
+    }
+
+    public function setPromo(?Promo $Promo): self
+    {
+        $this->Promo = $Promo;
 
         return $this;
     }

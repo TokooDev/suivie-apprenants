@@ -2,49 +2,94 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CompetenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CompetenceRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=CompetenceRepository::class)
- */
+ * @ApiResource(
+ * collectionOperations={
+ *                      "getcomp"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/competences",  
+ *              "normalization_context"={"groups"={"compget:read"}},  
+ *          }, 
+ *      "postcomp"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/competences", 
+ *              "normalization_context"={"groups"={"compget:read"}},
+ *                 
+ *          }, 
+ *                 
+*                    
+*                      },    
+                        
+*itemOperations={
+ *     "getcompbyID"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/competences/{id}",  
+ *              "normalization_context"={"groups"={"compgetid:read"}},  
+ *          }, 
+ * "putcompbyID"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="PUT",
+ *              "path"="/admin/competences/{id}",  
+ *              "normalization_context"={"groups"={"compgetid:read"}},  
+ *          }, 
+ * }, 
+* )
+* @ORM\Entity(repositoryClass=CompetenceRepository::class)
+*/
 class Competence
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
      */
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="competence")
+     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="competences")
+     * @ApiSubresource
      */
-    private $apprenants;
+    private $groupeDeCompetence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=NiveauEvaluation::class, inversedBy="competences")
+     * @ApiSubresource
+     * @Groups({"groupecomp:read","compget:read","compgetid:read"})
      */
-    private $tag;
+    private $NiveauEvaluation;
 
     public function __construct()
     {
-        $this->apprenants = new ArrayCollection();
-        $this->tag = new ArrayCollection();
+        $this->groupeDeCompetence = new ArrayCollection();
+        $this->NiveauEvaluation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,54 +122,52 @@ class Competence
     }
 
     /**
-     * @return Collection|Apprenant[]
+     * @return Collection|GroupeCompetence[]
      */
-    public function getApprenants(): Collection
+    public function getGroupeDeCompetence(): Collection
     {
-        return $this->apprenants;
+        return $this->groupeDeCompetence;
     }
 
-    public function addApprenant(Apprenant $apprenant): self
+    public function addGroupeDeCompetence(GroupeCompetence $groupeDeCompetence): self
     {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->addCompetence($this);
+        if (!$this->groupeDeCompetence->contains($groupeDeCompetence)) {
+            $this->groupeDeCompetence[] = $groupeDeCompetence;
         }
 
         return $this;
     }
 
-    public function removeApprenant(Apprenant $apprenant): self
+    public function removeGroupeDeCompetence(GroupeCompetence $groupeDeCompetence): self
     {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            $apprenant->removeCompetence($this);
+        if ($this->groupeDeCompetence->contains($groupeDeCompetence)) {
+            $this->groupeDeCompetence->removeElement($groupeDeCompetence);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Tag[]
+     * @return Collection|NiveauEvaluation[]
      */
-    public function getTag(): Collection
+    public function getNiveauEvaluation(): Collection
     {
-        return $this->tag;
+        return $this->NiveauEvaluation;
     }
 
-    public function addTag(Tag $tag): self
+    public function addNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
+        if (!$this->NiveauEvaluation->contains($niveauEvaluation)) {
+            $this->NiveauEvaluation[] = $niveauEvaluation;
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
     {
-        if ($this->tag->contains($tag)) {
-            $this->tag->removeElement($tag);
+        if ($this->NiveauEvaluation->contains($niveauEvaluation)) {
+            $this->NiveauEvaluation->removeElement($niveauEvaluation);
         }
 
         return $this;
