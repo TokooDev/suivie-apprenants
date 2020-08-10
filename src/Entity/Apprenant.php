@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ApprenantRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,61 +19,64 @@ class Apprenant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"grpe:read","grap:read","apfor:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"grpe:read","grap:read","apfor:read"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"grpe:read","apfor:read"})
+     * 
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"grpe:read","grap:read","apfor:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"grpe:read","grap:read","apfor:read"})
      */
     private $tel;
+    /**
+     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
+     * @Groups({"grpe:read","grap:read","apfor:read"})
+     */
+    private $profildesortie;
+
+    
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
+     * @Groups({"grpe:read"})
+     */
+    private $Promo;
+
+    /**
+     * @ORM\Column(type="blob", nullable=true)
      */
     private $avatar;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
+     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="apprenant")
      */
-    private $profildesortie;
+    private $groupes;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
-     */
-    private $Groupe;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
-     */
-    private $ProfilDeSortie;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
-     */
-    private $Promo;
-
-    
-   
 
     public function __construct()
     {
         $this->competence = new ArrayCollection();
-        $this->Groupe = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -128,18 +132,6 @@ class Apprenant
         return $this;
     }
 
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
     public function getProfildesortie(): ?ProfilDeSortie
     {
         return $this->profildesortie;
@@ -152,31 +144,6 @@ class Apprenant
         return $this;
     }
 
-    /**
-     * @return Collection|Groupe[]
-     */
-    public function getGroupe(): Collection
-    {
-        return $this->Groupe;
-    }
-
-    public function addGroupe(Groupe $groupe): self
-    {
-        if (!$this->Groupe->contains($groupe)) {
-            $this->Groupe[] = $groupe;
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Groupe $groupe): self
-    {
-        if ($this->Groupe->contains($groupe)) {
-            $this->Groupe->removeElement($groupe);
-        }
-
-        return $this;
-    }
 
     public function getPromo(): ?Promo
     {
@@ -186,6 +153,46 @@ class Apprenant
     public function setPromo(?Promo $Promo): self
     {
         $this->Promo = $Promo;
+
+        return $this;
+    }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Groupe[]
+     */
+    public function getGroupes(): Collection
+    {
+        return $this->groupes;
+    }
+
+    public function addGroupe(Groupe $groupe): self
+    {
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
+            $groupe->addApprenant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupe(Groupe $groupe): self
+    {
+        if ($this->groupes->contains($groupe)) {
+            $this->groupes->removeElement($groupe);
+            $groupe->removeApprenant($this);
+        }
 
         return $this;
     }

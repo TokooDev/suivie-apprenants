@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PromoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PromoRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,56 +19,67 @@ class Promo
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"grpe:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $titre;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $referenceAgate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $fabrique;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"grpe:read"})
      */
     private $dateFin;
 
     /**
      * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="Promo")
+     * 
      */
     private $apprenants;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="Promo")
+     * @Groups({"grpe:read"})
      */
     private $referentiels;
 

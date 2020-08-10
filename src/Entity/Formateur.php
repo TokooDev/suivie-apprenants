@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\FormateurRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FormateurRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource()
@@ -18,24 +19,33 @@ class Formateur
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"grpe:read","apfor:read"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"grpe:read","apfor:read"})
+     * 
      */
     private $libele;
 
     /**
-     * @ORM\OneToMany(targetEntity=Groupe::class, mappedBy="formateur")
+     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="formateur")
      */
-    private $Groupe;
+    private $groupes;
 
     public function __construct()
     {
-        $this->Groupe = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
     }
 
+    
+
+    
+
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -56,16 +66,16 @@ class Formateur
     /**
      * @return Collection|Groupe[]
      */
-    public function getGroupe(): Collection
+    public function getGroupes(): Collection
     {
-        return $this->Groupe;
+        return $this->groupes;
     }
 
     public function addGroupe(Groupe $groupe): self
     {
-        if (!$this->Groupe->contains($groupe)) {
-            $this->Groupe[] = $groupe;
-            $groupe->setFormateur($this);
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
+            $groupe->addFormateur($this);
         }
 
         return $this;
@@ -73,14 +83,20 @@ class Formateur
 
     public function removeGroupe(Groupe $groupe): self
     {
-        if ($this->Groupe->contains($groupe)) {
-            $this->Groupe->removeElement($groupe);
-            // set the owning side to null (unless already changed)
-            if ($groupe->getFormateur() === $this) {
-                $groupe->setFormateur(null);
-            }
+        if ($this->groupes->contains($groupe)) {
+            $this->groupes->removeElement($groupe);
+            $groupe->removeFormateur($this);
         }
 
         return $this;
     }
+
+    
+    
+
+    
+
+   
+    
+
 }

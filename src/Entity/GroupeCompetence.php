@@ -11,7 +11,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * collectionOperations={
+ *          "createGroupeCompetence"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/referentiels",
+ *              
+ *          }, 
+ * },)
  * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
  */
 class GroupeCompetence

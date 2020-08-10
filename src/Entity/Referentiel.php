@@ -29,13 +29,27 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "normalization_context"={"groups"={"competence:read"}},  
  *   
  *          }, 
+ *         
  *      }, 
- *      
- * 
+ * itemOperations={
+ *      "getGroup"={
+ *          "method"= "GET",
+ *          "path"= "/admin/referentiels/{id}",   
+ *      },
+ *      "getCompetenceGroupe"={
+ *          "method"= "GET",
+ *          "path"= "/admin/referentiels/{id}/groupecompetences",   
+ *      },
+ *      "ajoutgrpeCompetence"={
+ *             "method"="PUT",
+ *             "path" = "/admin/referentiels/{id}",
+ *      },
+ *      "delete_profil"={
+ *             "method"="DELETE",
+ *             "path" = "/admin/referentiels/{id}",
+ *      },
  *
- * 
- * 
- * )
+ * },)
  * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
 class Referentiel
@@ -44,42 +58,42 @@ class Referentiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      * 
      */
     private $libele;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      * 
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      * 
      */
     private $programme;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      * 
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read"})
+     * @Groups({"ref_grpe:read","grpe:read"})
      * 
      */
     private $critereAdmission;
