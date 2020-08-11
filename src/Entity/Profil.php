@@ -7,6 +7,13 @@ use App\Repository\ProfilRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
+=======
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
+>>>>>>> diouf
 
 /**
  * @ApiResource(
@@ -37,6 +44,16 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Le libelle ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
+>>>>>>> diouf
      */
     private $libelle;
 

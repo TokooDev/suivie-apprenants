@@ -5,6 +5,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+<<<<<<< HEAD
+=======
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
+>>>>>>> diouf
 
 /**
  * @ApiResource(
@@ -29,6 +36,16 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le username ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le username ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le username ne doit pas dépasser {{ limit }} charactères"
+     * )
+>>>>>>> diouf
      */
     private $username;
 
@@ -37,26 +54,78 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le password ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 8,
+     *      minMessage = "Le password ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le password ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * 
+>>>>>>> diouf
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le prenom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le prenom ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le prenom ne doit pas dépasser {{ limit }} charactères"
+     * )
+>>>>>>> diouf
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le nom ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
+     * )
+>>>>>>> diouf
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le mail ne doit pas être vide")
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "L'mail ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Assert\Email(
+     *     message = "L'adresse '{{ value }}' n'est pas un email valide."
+     * )
+>>>>>>> diouf
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+<<<<<<< HEAD
+=======
+     * @Assert\NotBlank(message="Le numero de telephone ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 9,
+     *      max = 25,
+     *      minMessage = "Le numero de telephone doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le numero de telephone doit pas dépasser {{ limit }} charactères"
+     * )
+>>>>>>> diouf
      */
     private $tel;
 
