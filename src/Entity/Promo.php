@@ -94,6 +94,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "path"= "/admin/promos/{id_p}/apprenants/{id}", 
  *          "normalization_context"={"groups"={"modifierAppreantsDunePromo:write"}},  
  *      },
+ *      "getPromoPrincipal"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/promos",
+ *              "normalization_context"={"groups"={"promoprincipal:read"}}, 
+ *          },
  * },
  * )
  * @ORM\Entity(repositoryClass=PromoRepository::class)
@@ -104,7 +111,7 @@ class Promo
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"promo:read"})
+     * @Groups({"grpe:read","promo:read"})
      */
     private $id;
 
@@ -117,7 +124,7 @@ class Promo
      *      minMessage = "La langue doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "La langue ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({""grpe:read",promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $langue;
 
@@ -130,7 +137,7 @@ class Promo
      *      minMessage = "Le titre doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le titre ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","modifierPromoEtReferentiel:write","promo:write","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read"})
+     * @Groups({"grpe:read","promo:read","promo:read","modifierPromoEtReferentiel:write","promo:write","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read"})
      */
     private $titre;
 
@@ -144,17 +151,16 @@ class Promo
      * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $description;
-
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le lieu  ne doit pas être vide")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le lieu ne doit pas être vide")
      * @Assert\Length(
      *      min = 2,
      *      max = 100,
      *      minMessage = "Le lieu doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le lieu ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read",promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $lieu;
 
@@ -167,7 +173,7 @@ class Promo
      *      minMessage = "La référencedoit avoir au moins {{ limit }} charactères",
      *      maxMessage = "La référencene doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read","promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $ReferenceAgate;
 
@@ -180,17 +186,17 @@ class Promo
      *      minMessage = "La fabrique doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "La fabrique ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read","promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $Fabrique;
 
     /**
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank(message="La date  ne doit pas être vide")
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank(message="la date ne doit pas être vide")
      * @Assert\Date(
      *      message = "La date '{{ value }}' n'est pas une date valide."
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read"})
      */
     private $dateDebut;
 
@@ -200,26 +206,28 @@ class Promo
      * @Assert\Date(
      *      message = "La date '{{ value }}' n'est pas une date valide."
      * )
-     * @Groups({"promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read","promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $dateFin;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, inversedBy="promos")
-     * @Groups({"promo:read","modifierPromoEtReferentiel:write","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
-     */
-    private $referentiels;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="promo")
-     * @Groups({"promo:read","modifierAppreantsDunePromo:write","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
+     * @Groups({"promo:read","modifierPromoEtReferentiel:write","modifierAppreantsDunePromo:write","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
+     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="Promo")
+     * 
      */
     private $apprenants;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="Promo")
+     * @Groups({"grpe:read","promo:read"})
+     */
+    private $referentiels;
+
     public function __construct()
     {
-        $this->referentiels = new ArrayCollection();
         $this->apprenants = new ArrayCollection();
+        $this->referentiels = new ArrayCollection();
     }
 
     public function getId(): ?int

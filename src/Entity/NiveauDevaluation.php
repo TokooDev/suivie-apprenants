@@ -49,7 +49,7 @@ class NiveauDevaluation
     private $criteres;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="niveauDevaluations")
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="NiveauEvaluation")
      */
     private $competences;
 

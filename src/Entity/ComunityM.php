@@ -46,11 +46,11 @@ class ComunityM
      * )
      */
     private $nom;
-
     /**
-     * @ORM\Column(type="string", length=255)
-     *  @Assert\NotBlank(message="L'email ne doit pas être vide")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="L'email ne doit pas être vide")
      * @Assert\Length(
+     *      
      *      max = 255,
      *      maxMessage = "L'email ne doit pas dépasser {{ limit }} charactères"
      * )
@@ -119,7 +119,7 @@ class ComunityM
     }
 
     public function setTel(string $tel): self
-    {
+    {  
         $this->tel = $tel;
 
         return $this;

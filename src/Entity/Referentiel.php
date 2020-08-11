@@ -6,14 +6,66 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReferentielRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * 
+ *      collectionOperations={
+ *          "getReferentiel"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/referentiels",
+ *              "normalization_context"={"groups"={"ref_grpe:read"}}, 
+ *          }, 
+ *          "getGC"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/referentiels/groupecompetences",
+ *              "normalization_context"={"groups"={"competence:read"}},  
+ *   
+ *          }, 
+ *         "getGroupCompetence"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"= "POST",
+ *              "path"= "/admin/referentiels", 
+ *              "normalization_context"={"groups"={"affiGr:write"}},  
+ *      },
+ *         
+ *      }, 
+ * itemOperations={
+ * 
+ *      "getGroup"={
+ *          "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *          "security_message"="ACCES REFUSE",
+ *          "method"= "GET",
+ *          "path"= "/admin/referentiels/{id}", 
+ *          "normalization_context"={"groups"={"afficherGr:read"}},  
+ *      },
+ *      "getCompetenceGroupe"={
+ *          "method"= "GET",
+ *          "path"= "/admin/referentiels/{id}/groupecompetences/{id_g}",
+ *          "normalization_context"={"groups"={"grpco:read"}},   
+ *      },
+ *      "ajoutgrpeCompetence"={
+ *             "method"="PUT",
+ *             "path" = "/admin/referentiels/{id}",
+ *             "normalization_context"={"groups"={"grpcom:write"}},
+ *      },
+ *      "delete_profil"={
+ *             "method"="DELETE",
+ *             "path" = "/admin/referentiels/{id}",
+ *      },
+ *
+ * },)
  * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
 class Referentiel
@@ -22,6 +74,8 @@ class Referentiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
+     *
      */
     private $id;
 
@@ -34,7 +88,7 @@ class Referentiel
      *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read","promo:read","afficherUnePromoReferentiel:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
      */
     private $libelle;
 
@@ -45,13 +99,14 @@ class Referentiel
      *      min = 50,
      *      minMessage = "La présentation doit avoir au moins {{ limit }} charactères"
      * )
-     * @Groups({"promo:read"})
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le programme  ne doit pas être vide")
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
+     * @Assert\NotBlank(message="Le programme ne doit pas être vide")
      * @Assert\Length(
      *      min = 50,
      *      max = 255,
@@ -63,6 +118,7 @@ class Referentiel
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * @Assert\NotBlank(message="Le critère d'évaluation  ne doit pas être vide")
      * @Assert\Length(
      *      min = 50,
@@ -88,14 +144,14 @@ class Referentiel
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, inversedBy="referentiels")
-     * @Groups({"afficherUnePromoReferentiel:read"})
+     * @Groups({"afficherUnePromoReferentiel:read","ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read","affiGr:write"})
      */
     private $groupedecompetences;
 
     public function __construct()
     {
-        $this->promos = new ArrayCollection();
-        $this->groupedecompetences = new ArrayCollection();
+        $this->Promo = new ArrayCollection();
+        $this->GroupeCompetence = new ArrayCollection();
     }
 
     public function getId(): ?int

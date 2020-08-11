@@ -3,17 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GroupeDeCompetenceRepository;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ * collectionOperations={
+ *          "createGroupeCompetence"={
+ *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/referentiels",
+ *              
+ *          }, 
+ * },)
  * @ORM\Entity(repositoryClass=GroupeDeCompetenceRepository::class)
  */
 class GroupeDeCompetence
@@ -22,6 +32,9 @@ class GroupeDeCompetence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
+     * 
+     * 
      */
     private $id;
 
@@ -34,13 +47,14 @@ class GroupeDeCompetence
      *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"afficherUnePromoReferentiel:read"})
+     * @Groups({"afficherUnePromoReferentiel:read","ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="La description  ne doit pas être vide")
+     * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      * @Assert\Length(
      *      min = 100,
      *      minMessage = "La description doit avoir au moins {{ limit }} charactères"
@@ -50,7 +64,7 @@ class GroupeDeCompetence
 
     /**
      * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="groupeDeCompetences")
-     * @Groups({"afficherUnePromoReferentiel:read"})
+     * @Groups({"afficherUnePromoReferentiel:read","ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read"})
      */
     private $competences;
 
@@ -61,8 +75,8 @@ class GroupeDeCompetence
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
         $this->referentiels = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int

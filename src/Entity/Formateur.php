@@ -23,6 +23,7 @@ class Formateur
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"grpe:read","apfor:read","promo:read"})
      */
     private $id;
 
@@ -35,12 +36,12 @@ class Formateur
      *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
      */
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="Le nom ne doit pas être vide")
      * @Assert\Length(
      *      min = 3,
@@ -48,14 +49,15 @@ class Formateur
      *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
+     * @Groups({"grpe:read","apfor:read","promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
      */
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank(message="L'email ne doit pas être vide")
      * @Assert\Length(
+     *      
      *      max = 255,
      *      maxMessage = "L'email ne doit pas dépasser {{ limit }} charactères"
      * )
@@ -85,7 +87,6 @@ class Formateur
     {
         $this->groupes = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;

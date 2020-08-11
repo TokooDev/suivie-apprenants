@@ -2,35 +2,55 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ProfilRepository;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use App\Repository\ProfilRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+
 
 /**
  * @ApiResource(
- * normalizationContext={"groups"={"profil:read"}},
- * attributes={
- * "security"="is_granted('ROLE_Admin')",
- * "security_message"="Vous n'avez pas access à cette Ressource"
+ * collectionOperations = {
+ *      "getprofils" = {
+ *          "path" = "/admin/profils/",
+ *          "method"="GET",
+ * 
+ *       },
+ *       "create_profils"={
+ *           "method"= "POST",
+ *           "path" = "/admin/profils",
+ *       },
  * },
- * collectionOperations={
- * "get","post",
- * "get_role_admin"={
- * "method"="GET",
- * "path"="/admin/profils" ,
- *},
-* },
-* itemOperations={
-* "get","put","delete"
-* },
- * )
+ * itemOperations={
+ *      "get_one_profil"={
+ *             "method"="GET",
+ *             "path" = "/admin/profils/{id}",
+ *             
+ *      },
+ * "delete_profil"={
+ *             "method"="DELETE",
+ *             "path" = "/admin/profils/{id}",
+ *      },
+ *      "edit_profil"={
+ *             "method"="PUT",
+ *             "path" = "/admin/profils/{id}",
+ *      }
+ * },
+ *          attributes = {
+ *               "security" = "is_granted('ROLE_ADMIN')",
+ *               "security_message" = "Accès refusé!",
+ *               "pagination_items_per_page"=2,
+ *               
+ * 
+ * 
+ *     
+ *      
+ *  },)
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
  */
 class Profil

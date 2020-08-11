@@ -21,18 +21,21 @@ class ProfilDeSortie
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"grap:read"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le libellé  ne doit pas être vide")
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
      * @Assert\Length(
      *      min = 50,
      *      max = 255,
-     *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
      * )
+     * @Groups({"grap:read"})
      */
     private $libelle;
 

@@ -35,7 +35,7 @@ class Apprenant
      *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
      */
     private $prenom;
 
@@ -48,7 +48,8 @@ class Apprenant
      *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
+     * @Groups({"grpe:read","apfor:read","promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
+     * 
      * 
      */
     private $nom;
@@ -63,20 +64,20 @@ class Apprenant
      * @Assert\Email(
      *     message = "L'adresse '{{ value }}' n'est pas un email valide."
      * )
-     * @Groups({"promo:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le numéro de téléphone ne doit pas être vide")
+     * @Assert\NotBlank(message="Le numero ne doit pas être vide")
      * @Assert\Length(
      *      min = 9,
-     *      max = 25,
-     *      minMessage = "Le numéro téléphone doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "Le numéro téléphone ne doit pas dépasser {{ limit }} charactères"
+     *      max = 30,
+     *      minMessage = "Le numro de telephone doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le numero de telephone ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read"})
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $tel;
     /**

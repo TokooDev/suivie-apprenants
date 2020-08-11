@@ -13,7 +13,38 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *  collectionOperations={
+ *          "getgroup"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/groupes",
+ *              "normalization_context"={"groups"={"grpe:read"}}, 
+ *              
+ *            
+ *          },
+ *          "getGrp"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="GET",
+ *              "path"="/admin/groupes/apprenants",
+ *              "normalization_context"={"groups"={"grap:read"}}, 
+ *              
+ *            
+ *          },
+ *          "ajoutAF"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *              "security_message"="ACCES REFUSE",
+ *              "method"="POST",
+ *              "path"="/admin/groupes",
+ *              "normalization_context"={"groups"={"apfor:read"}},
+ *               
+ *              
+ *            
+ *          },
+ * 
+ * },)
  * @ORM\Entity(repositoryClass=GroupeRepository::class)
  */
 class Groupe
@@ -27,15 +58,15 @@ class Groupe
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le libellé ne doit pas être vide")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
      * @Assert\Length(
      *      min = 10,
      *      max = 100,
-     *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
+     * @Groups({"grpe:read","apfor:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
      */
     private $libelle;
 
@@ -63,8 +94,10 @@ class Groupe
 
     public function __construct()
     {
-        $this->apprenants = new ArrayCollection();
-        $this->formateurs = new ArrayCollection();
+        
+        $this->formateur = new ArrayCollection();
+        $this->apprenant = new ArrayCollection();
+        
     }
 
     public function getId(): ?int

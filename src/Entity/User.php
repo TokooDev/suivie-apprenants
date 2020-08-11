@@ -1,33 +1,31 @@
 <?php
 
 namespace App\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\SerializedName;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- *@ApiResource(
- *    normalizationContext={"groups"={"user:read"}},
- *    denormalizationContext={"groups"={"user:write"}}
+ * @ApiResource(
+ * collectionOperations={
+ *      "create"={
+ *              "method"="POST",
+ *              "path"="/users",
+ *              "route_name"="create"
+ * }
+ * }
  * )
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
 {
     /**
-     * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      * @Groups("user:read")
      */
     private $id;
@@ -96,6 +94,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="L'email ne doit pas être vide")
      * @Assert\Length(
+     *      
      *      max = 255,
      *      maxMessage = "L'email ne doit pas dépasser {{ limit }} charactères"
      * )
@@ -126,9 +125,10 @@ class User implements UserInterface
      * @Groups({"user:read", "user:write"})
      */
     private $profil;
+
     /**
-     * @ORM\Column(type="blob", nullable=true)
-     * @Assert\NotBlank(message="L'avatar ne doit pas être vide")
+     * @ORM\Column(type="blob")
+     *  @Assert\NotBlank(message="L'avatar ne doit pas être vide")
      */
     private $Avatar;
 
