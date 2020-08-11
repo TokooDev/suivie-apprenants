@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\GroupeTagRepository;
+use App\Repository\GroupeDeTagRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @ApiResource(
@@ -46,9 +50,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  * 
  * },)
- * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
+ * @ORM\Entity(repositoryClass=GroupeDeTagRepository::class)
  */
-class GroupeTag
+class GroupeDeTag
 {
     /**
      * @ORM\Id()
@@ -60,9 +64,16 @@ class GroupeTag
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"groupetag:read"})
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="GroupeTag")
@@ -80,14 +91,14 @@ class GroupeTag
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(?string $libele): self
+    public function setLibelle(?string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }

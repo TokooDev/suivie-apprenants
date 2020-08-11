@@ -4,10 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PromoRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ApiResource(
@@ -41,48 +45,84 @@ class Promo
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le titre ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 255,
+     *      minMessage = "Le titre doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le titre ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $titre;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"grpe:read","promo:read"})
-     */
-    private $description;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le lieu ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 100,
+     *      minMessage = "Le lieu doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le lieu ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le referentiel ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 255,
+     *      minMessage = "Le referentiel doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le referentiel ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $referenceAgate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le fabrique ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 255,
+     *      minMessage = "Le fabrique doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le fabrique ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $fabrique;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank(message="la date ne doit pas être vide")
+     * @Assert\Date(
+     *      message = "La date '{{ value }}' n'est pas une date valide."
+     * )
      * @Groups({"grpe:read"})
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Date(
+     *      message = "La date '{{ value }}' n'est pas une date valide."
+     * )
      * @Groups({"grpe:read","promo:read"})
      */
     private $dateFin;
@@ -99,6 +139,18 @@ class Promo
      * @Groups({"grpe:read","promo:read"})
      */
     private $referentiels;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      minMessage = "Le description doit avoir au moins {{ limit }} charactères",
+     *      
+     * )
+     * @Groups({"grpe:read","promo:read"})
+     */
+    private $description;
 
     public function __construct()
     {
@@ -131,18 +183,6 @@ class Promo
     public function setTitre(?string $titre): self
     {
         $this->titre = $titre;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -262,6 +302,18 @@ class Promo
             $this->referentiels->removeElement($referentiel);
             $referentiel->removePromo($this);
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

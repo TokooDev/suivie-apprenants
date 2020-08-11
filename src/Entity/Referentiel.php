@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReferentielRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @ApiResource(
@@ -78,51 +81,82 @@ class Referentiel
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 255,
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
-    private $libele;
+    private $libelle;
+
+    
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     * 
-     */
-    private $presentation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le programme ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le programme doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le programme ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"ref_grpe:read","grpe:read","promo:read"})
      * 
      */
     private $programme;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     * 
-     */
-    private $critereEvaluation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     * 
-     */
-    private $critereAdmission;
-
     /**
      * @ORM\ManyToMany(targetEntity=Promo::class, inversedBy="referentiels")
      */
     private $Promo;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
+     * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, inversedBy="referentiels")
      * @ApiSubresource
      * @Groups({"ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read","affiGr:write"})
      * 
      */
     private $GroupeCompetence;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="La presentation ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 255,
+     *      minMessage = "La presentation doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "La presentation ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
+     */
+    private $presentation;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="Le criter d'evaluation ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      
+     *      minMessage = "Le criter d'evaluation doit avoir au moins {{ limit }} charactères",
+     *     
+     * )
+     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
+     */
+    private $critereEvaluation;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(message="Le critere d'admission ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      minMessage = "Le critere d'admission doit avoir au moins {{ limit }} charactères",
+     *     
+     * )
+     */
+    private $critereAdmission;
 
     public function __construct()
     {
@@ -137,27 +171,17 @@ class Referentiel
 
     public function getLibele(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(?string $libele): self
+    public function setLibele(?string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
-    public function getPresentation(): ?string
-    {
-        return $this->presentation;
-    }
-
-    public function setPresentation(?string $presentation): self
-    {
-        $this->presentation = $presentation;
-
-        return $this;
-    }
+   
 
     public function getProgramme(): ?string
     {
@@ -171,29 +195,8 @@ class Referentiel
         return $this;
     }
 
-    public function getCritereEvaluation(): ?string
-    {
-        return $this->critereEvaluation;
-    }
-
-    public function setCritereEvaluation(?string $critereEvaluation): self
-    {
-        $this->critereEvaluation = $critereEvaluation;
-
-        return $this;
-    }
-
-    public function getCritereAdmission(): ?string
-    {
-        return $this->critereAdmission;
-    }
-
-    public function setCritereAdmission(?string $critereAdmission): self
-    {
-        $this->critereAdmission = $critereAdmission;
-
-        return $this;
-    }
+   
+   
 
     /**
      * @return Collection|Promo[]
@@ -243,6 +246,42 @@ class Referentiel
         if ($this->GroupeCompetence->contains($groupeCompetence)) {
             $this->GroupeCompetence->removeElement($groupeCompetence);
         }
+
+        return $this;
+    }
+
+    public function getPresentation(): ?string
+    {
+        return $this->presentation;
+    }
+
+    public function setPresentation(?string $presentation): self
+    {
+        $this->presentation = $presentation;
+
+        return $this;
+    }
+
+    public function getCritereEvaluation(): ?string
+    {
+        return $this->critereEvaluation;
+    }
+
+    public function setCritereEvaluation(?string $critereEvaluation): self
+    {
+        $this->critereEvaluation = $critereEvaluation;
+
+        return $this;
+    }
+
+    public function getCritereAdmission(): ?string
+    {
+        return $this->critereAdmission;
+    }
+
+    public function setCritereAdmission(?string $critereAdmission): self
+    {
+        $this->critereAdmission = $critereAdmission;
 
         return $this;
     }

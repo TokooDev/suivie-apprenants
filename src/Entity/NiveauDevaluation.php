@@ -3,16 +3,19 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\NiveauEvaluationRepository;
+use App\Repository\NiveauDevaluationRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=NiveauEvaluationRepository::class)
+ * @ORM\Entity(repositoryClass=NiveauDevaluationRepository::class)
  */
-class NiveauEvaluation
+class NiveauDevaluation
 {
     /**
      * @ORM\Id()
@@ -23,11 +26,25 @@ class NiveauEvaluation
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="L'action ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 100,
+     *      minMessage = "L'action doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "L'action ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $actions;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le critere ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 100,
+     *      max = 255,
+     *      minMessage = "Le critere doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le critere ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $critere;
 

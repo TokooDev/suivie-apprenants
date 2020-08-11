@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\NiveauEvaluation;
+use App\Entity\NiveauDevaluation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method NiveauEvaluation|null find($id, $lockMode = null, $lockVersion = null)
- * @method NiveauEvaluation|null findOneBy(array $criteria, array $orderBy = null)
- * @method NiveauEvaluation[]    findAll()
- * @method NiveauEvaluation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method NiveauDevaluation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method NiveauDevaluation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method NiveauDevaluation[]    findAll()
+ * @method NiveauDevaluation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class NiveauEvaluationRepository extends ServiceEntityRepository
+class NiveauDevaluationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, NiveauEvaluation::class);
+        parent::__construct($registry, NiveauDevaluation::class);
     }
 
     // /**
-    //  * @return NiveauEvaluation[] Returns an array of NiveauEvaluation objects
+    //  * @return NiveauDevaluation[] Returns an array of NiveauDevaluation objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class NiveauEvaluationRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?NiveauEvaluation
+    public function findOneBySomeField($value): ?NiveauDevaluation
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.exampleField = :val')

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\GroupeTag;
+use App\Entity\GroupeDeTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method GroupeTag|null find($id, $lockMode = null, $lockVersion = null)
- * @method GroupeTag|null findOneBy(array $criteria, array $orderBy = null)
- * @method GroupeTag[]    findAll()
- * @method GroupeTag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method GroupeDeTag|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GroupeDeTag|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GroupeDeTag[]    findAll()
+ * @method GroupeDeTag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroupeTagRepository extends ServiceEntityRepository
+class GroupeDeTagRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, GroupeTag::class);
+        parent::__construct($registry, GroupeDeTag::class);
     }
 
     // /**
-    //  * @return GroupeTag[] Returns an array of GroupeTag objects
+    //  * @return GroupeDeTag[] Returns an array of GroupeDeTag objects
     //  */
     /*
     public function findByExampleField($value)

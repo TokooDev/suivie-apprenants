@@ -3,12 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\CompetenceRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+
 
 /**
  * @ApiResource()
@@ -26,33 +30,45 @@ class Competence
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libele ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le libele doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libele ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"competence:read","grpco:read","grpcom:read","afficherGr:read","affiGr:write","grpcom:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 100,
+     *      minMessage = "La description doit avoir au moins {{ limit }} charactères",
+     *)
      * @Groups({"competence:read","grpco:read","grpcom:read","afficherGr:read","affiGr:write","grpcom:write"})
      */
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, inversedBy="competences")
      * @ApiSubresource
      */
-    private $GroupeCompetence;
+    private $GroupeDeCompetence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=NiveauEvaluation::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=NiveauDevaluation::class, inversedBy="competences")
      * @ApiSubresource
      * 
      */
-    private $NiveauEvaluation;
+    private $NiveauDevaluation;
 
     public function __construct()
     {
-        $this->GroupeCompetence = new ArrayCollection();
-        $this->NiveauEvaluation = new ArrayCollection();
+        $this->GroupeDeCompetence = new ArrayCollection();
+        $this->NiveauDevaluation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,52 +101,52 @@ class Competence
     }
 
     /**
-     * @return Collection|GroupeCompetence[]
+     * @return Collection|GroupeDeCompetence[]
      */
-    public function getGroupeCompetence(): Collection
+    public function getGroupeDeCompetence(): Collection
     {
-        return $this->GroupeCompetence;
+        return $this->GroupeDeCompetence;
     }
 
-    public function addGroupeCompetence(GroupeCompetence $groupeCompetence): self
+    public function addGroupeDeCompetence(GroupeDeCompetence $GroupeDeCompetence): self
     {
-        if (!$this->GroupeCompetence->contains($groupeCompetence)) {
-            $this->GroupeCompetence[] = $groupeCompetence;
+        if (!$this->GroupeDeCompetence->contains($GroupeDeCompetence)) {
+            $this->GroupeDeCompetence[] = $GroupeDeCompetence;
         }
 
         return $this;
     }
 
-    public function removeGroupeCompetence(GroupeCompetence $groupeCompetence): self
+    public function removeGroupeDeCompetence(GroupeDeCompetence $GroupeDeCompetence): self
     {
-        if ($this->GroupeCompetence->contains($groupeCompetence)) {
-            $this->GroupeCompetence->removeElement($groupeCompetence);
+        if ($this->GroupeDeCompetence->contains($GroupeDeCompetence)) {
+            $this->GroupeDeCompetence->removeElement($GroupeDeCompetence);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|NiveauEvaluation[]
+     * @return Collection|NiveauDevaluation[]
      */
-    public function getNiveauEvaluation(): Collection
+    public function getNiveauDevaluation(): Collection
     {
-        return $this->NiveauEvaluation;
+        return $this->NiveauDevaluation;
     }
 
-    public function addNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
+    public function addNiveauDevaluation(NiveauDevaluation $NiveauDevaluation): self
     {
-        if (!$this->NiveauEvaluation->contains($niveauEvaluation)) {
-            $this->NiveauEvaluation[] = $niveauEvaluation;
+        if (!$this->NiveauDevaluation->contains($NiveauDevaluation)) {
+            $this->NiveauDevaluation[] = $NiveauDevaluation;
         }
 
         return $this;
     }
 
-    public function removeNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
+    public function removeNiveauDevaluation(NiveauDevaluation $NiveauDevaluation): self
     {
-        if ($this->NiveauEvaluation->contains($niveauEvaluation)) {
-            $this->NiveauEvaluation->removeElement($niveauEvaluation);
+        if ($this->NiveauDevaluation->contains($NiveauDevaluation)) {
+            $this->NiveauDevaluation->removeElement($NiveauDevaluation);
         }
 
         return $this;

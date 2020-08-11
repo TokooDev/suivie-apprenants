@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupeCompetenceRepository;
+use App\Repository\GroupeDeCompetenceRepository;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @ApiResource(
@@ -21,9 +24,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              
  *          }, 
  * },)
- * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
+ * @ORM\Entity(repositoryClass=GroupeDeCompetenceRepository::class)
  */
-class GroupeCompetence
+class GroupeDeCompetence
 {
     /**
      * @ORM\Id()
@@ -37,17 +40,29 @@ class GroupeCompetence
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      * 
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 100,
+     *      minMessage = "La description doit avoir au moins {{ limit }} charactères",
+     *)
      * @Groups({"ref_grpe:read","competence:read","grpcom:write","afficherGr:read"})
      *
      */
-    private $descriptif;
+    private $descriptiion;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="GroupeCompetence")
@@ -74,26 +89,26 @@ class GroupeCompetence
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(?string $libele): self
+    public function setLibelle(?string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
-    public function getDescriptif(): ?string
+    public function getDescriptiion(): ?string
     {
-        return $this->descriptif;
+        return $this->descriptiion;
     }
 
-    public function setDescriptif(?string $descriptif): self
+    public function setDescriptiion(?string $descriptiion): self
     {
-        $this->descriptif = $descriptif;
+        $this->descriptiion = $descriptiion;
 
         return $this;
     }

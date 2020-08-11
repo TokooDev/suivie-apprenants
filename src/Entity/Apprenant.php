@@ -1,13 +1,16 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ApprenantRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * @ApiResource()
@@ -25,12 +28,26 @@ class Apprenant
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le prénom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 80,
+     *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","apfor:read","promo:read"})
      * 
      */
@@ -38,12 +55,28 @@ class Apprenant
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="L'email ne doit pas être vide")
+     * @Assert\Length(
+     *      
+     *      max = 255,
+     *      maxMessage = "L'email ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Assert\Email(
+     *     message = "L'adresse '{{ value }}' n'est pas un email valide."
+     * )
      * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le numero ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 9,
+     *      max = 30,
+     *      minMessage = "Le numro de telephone doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le numero de telephone ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $tel;
@@ -62,6 +95,7 @@ class Apprenant
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     * @Assert\NotBlank(message="L'avatar ne doit pas être vide")
      */
     private $avatar;
 
