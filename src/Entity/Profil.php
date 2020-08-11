@@ -9,6 +9,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -22,8 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * "get_role_admin"={
  * "method"="GET",
  * "path"="/admin/profils" ,
- *}
-
+ *},
 * },
 * itemOperations={
 * "get","put","delete"
@@ -43,6 +45,13 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libellé  ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"profil:read"})
      */
     private $libelle;

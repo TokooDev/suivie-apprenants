@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ApprenantRepository;
+use App\Repository\FormateurRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,15 +15,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=ApprenantRepository::class)
+ * @ORM\Entity(repositoryClass=FormateurRepository::class)
  */
-class Apprenant
+class Formateur
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $id;
 
@@ -35,7 +35,7 @@ class Apprenant
      *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
+     * @Groups({"promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
      */
     private $prenom;
 
@@ -48,8 +48,7 @@ class Apprenant
      *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
-     * 
+     * @Groups({"promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherformateurPromo:read"})
      */
     private $nom;
 
@@ -63,7 +62,6 @@ class Apprenant
      * @Assert\Email(
      *     message = "L'adresse '{{ value }}' n'est pas un email valide."
      * )
-     * @Groups({"promo:read"})
      */
     private $email;
 
@@ -76,40 +74,16 @@ class Apprenant
      *      minMessage = "Le numéro téléphone doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le numéro téléphone ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"promo:read"})
      */
     private $tel;
-    /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
-     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
-     */
-    private $profildesortie;
-    
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
-     * @Groups({"grpe:read"})
-     */
-    private $Promo;
-
-    /**
-     * @ORM\Column(type="blob", nullable=true)
-     * @Assert\NotBlank(message="L'avatar ne doit pas être vide")
-     */
-    private $avatar;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="apprenant")
-     *  @Groups({"promo:read","grpPrincipal:read","afficherUnePromo:read","afficherUnePromoPrincipal:read","afficherApprenantsGroup:read","afficherformateurPromo:read"})
+     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="formateurs")
      */
     private $groupes;
-
-
     public function __construct()
     {
-        $this->competence = new ArrayCollection();
         $this->groupes = new ArrayCollection();
-       
     }
 
     public function getId(): ?int
@@ -165,43 +139,6 @@ class Apprenant
         return $this;
     }
 
-    public function getProfildesortie(): ?ProfilDeSortie
-    {
-        return $this->profildesortie;
-    }
-
-    public function setProfildesortie(?ProfilDeSortie $profildesortie): self
-    {
-        $this->profildesortie = $profildesortie;
-
-        return $this;
-    }
-
-
-    public function getPromo(): ?Promo
-    {
-        return $this->Promo;
-    }
-
-    public function setPromo(?Promo $Promo): self
-    {
-        $this->Promo = $Promo;
-
-        return $this;
-    }
-
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar($avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Groupe[]
      */
@@ -214,7 +151,7 @@ class Apprenant
     {
         if (!$this->groupes->contains($groupe)) {
             $this->groupes[] = $groupe;
-            $groupe->addApprenant($this);
+            $groupe->addFormateur($this);
         }
 
         return $this;
@@ -224,11 +161,9 @@ class Apprenant
     {
         if ($this->groupes->contains($groupe)) {
             $this->groupes->removeElement($groupe);
-            $groupe->removeApprenant($this);
+            $groupe->removeFormateur($this);
         }
 
         return $this;
     }
-
-    
 }

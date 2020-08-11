@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CompetenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CompetenceRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -23,28 +27,42 @@ class Competence
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libellé  ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 50,
+     *      max = 255,
+     *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Groups({"afficherUnePromoReferentiel:read"})
+     * 
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="La description  ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 100,
+     *      minMessage = "La description doit avoir au moins {{ limit }} charactères"
+     * )
+     * @Groups({"afficherUnePromoReferentiel:read"})
      */
     private $description;
+    /**
+     * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, mappedBy="competences")
+     */
+    private $groupeDeCompetences;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="competence")
+     * @ORM\ManyToMany(targetEntity=NiveauDevaluation::class, mappedBy="competences")
      */
-    private $apprenants;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="competences")
-     */
-    private $tag;
+    private $niveauDevaluations;
 
     public function __construct()
     {
-        $this->apprenants = new ArrayCollection();
-        $this->tag = new ArrayCollection();
+        $this->groupeDeCompetences = new ArrayCollection();
+        $this->niveauDevaluations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,54 +95,56 @@ class Competence
     }
 
     /**
-     * @return Collection|Apprenant[]
+     * @return Collection|GroupeDeCompetence[]
      */
-    public function getApprenants(): Collection
+    public function getGroupeDeCompetences(): Collection
     {
-        return $this->apprenants;
+        return $this->groupeDeCompetences;
     }
 
-    public function addApprenant(Apprenant $apprenant): self
+    public function addGroupeDeCompetence(GroupeDeCompetence $groupeDeCompetence): self
     {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->addCompetence($this);
+        if (!$this->groupeDeCompetences->contains($groupeDeCompetence)) {
+            $this->groupeDeCompetences[] = $groupeDeCompetence;
+            $groupeDeCompetence->addCompetence($this);
         }
 
         return $this;
     }
 
-    public function removeApprenant(Apprenant $apprenant): self
+    public function removeGroupeDeCompetence(GroupeDeCompetence $groupeDeCompetence): self
     {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            $apprenant->removeCompetence($this);
+        if ($this->groupeDeCompetences->contains($groupeDeCompetence)) {
+            $this->groupeDeCompetences->removeElement($groupeDeCompetence);
+            $groupeDeCompetence->removeCompetence($this);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Tag[]
+     * @return Collection|NiveauDevaluation[]
      */
-    public function getTag(): Collection
+    public function getNiveauDevaluations(): Collection
     {
-        return $this->tag;
+        return $this->niveauDevaluations;
     }
 
-    public function addTag(Tag $tag): self
+    public function addNiveauDevaluation(NiveauDevaluation $niveauDevaluation): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
+        if (!$this->niveauDevaluations->contains($niveauDevaluation)) {
+            $this->niveauDevaluations[] = $niveauDevaluation;
+            $niveauDevaluation->addCompetence($this);
         }
 
         return $this;
     }
 
-    public function removeTag(Tag $tag): self
+    public function removeNiveauDevaluation(NiveauDevaluation $niveauDevaluation): self
     {
-        if ($this->tag->contains($tag)) {
-            $this->tag->removeElement($tag);
+        if ($this->niveauDevaluations->contains($niveauDevaluation)) {
+            $this->niveauDevaluations->removeElement($niveauDevaluation);
+            $niveauDevaluation->removeCompetence($this);
         }
 
         return $this;

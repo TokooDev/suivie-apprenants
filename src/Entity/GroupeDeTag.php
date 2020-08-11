@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ProfilDeSortieRepository;
+use App\Repository\GroupeDeTagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,9 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=ProfilDeSortieRepository::class)
+ * @ORM\Entity(repositoryClass=GroupeDeTagRepository::class)
  */
-class ProfilDeSortie
+class GroupeDeTag
 {
     /**
      * @ORM\Id()
@@ -37,13 +37,13 @@ class ProfilDeSortie
     private $libelle;
 
     /**
-     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profildesortie")
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="groupeDeTags")
      */
-    private $apprenants;
+    private $tags;
 
     public function __construct()
     {
-        $this->apprenants = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,31 +64,26 @@ class ProfilDeSortie
     }
 
     /**
-     * @return Collection|Apprenant[]
+     * @return Collection|Tag[]
      */
-    public function getApprenants(): Collection
+    public function getTags(): Collection
     {
-        return $this->apprenants;
+        return $this->tags;
     }
 
-    public function addApprenant(Apprenant $apprenant): self
+    public function addTag(Tag $tag): self
     {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->setProfildesortie($this);
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
         }
 
         return $this;
     }
 
-    public function removeApprenant(Apprenant $apprenant): self
+    public function removeTag(Tag $tag): self
     {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            // set the owning side to null (unless already changed)
-            if ($apprenant->getProfildesortie() === $this) {
-                $apprenant->setProfildesortie(null);
-            }
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
         }
 
         return $this;

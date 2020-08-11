@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TagRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  *  @ApiResource()
@@ -23,17 +26,24 @@ class Tag
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libellé  ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity=GroupeDeTag::class, mappedBy="tags")
      */
-    private $competences;
+    private $groupeDeTags;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+        $this->groupeDeTags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,29 +63,31 @@ class Tag
         return $this;
     }
 
+    
+
     /**
-     * @return Collection|Competence[]
+     * @return Collection|GroupeDeTag[]
      */
-    public function getCompetences(): Collection
+    public function getGroupeDeTags(): Collection
     {
-        return $this->competences;
+        return $this->groupeDeTags;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupeDeTag(GroupeDeTag $groupeDeTag): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
-            $competence->addTag($this);
+        if (!$this->groupeDeTags->contains($groupeDeTag)) {
+            $this->groupeDeTags[] = $groupeDeTag;
+            $groupeDeTag->addTag($this);
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupeDeTag(GroupeDeTag $groupeDeTag): self
     {
-        if ($this->competences->contains($competence)) {
-            $this->competences->removeElement($competence);
-            $competence->removeTag($this);
+        if ($this->groupeDeTags->contains($groupeDeTag)) {
+            $this->groupeDeTags->removeElement($groupeDeTag);
+            $groupeDeTag->removeTag($this);
         }
 
         return $this;
