@@ -49,7 +49,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  *      "getCompetenceGroupe"={
  *          "method"= "GET",
- *          "path"= "/admin/referentiels/{id}/groupecompetences",
+ *          "path"= "/admin/referentiels/{id}/groupecompetences/{id_g}",
  *          "normalization_context"={"groups"={"grpco:read"}},   
  *      },
  *      "ajoutgrpeCompetence"={

@@ -79,11 +79,6 @@ class Groupe
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $type;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $projet;
 
     
