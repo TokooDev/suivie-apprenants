@@ -2,22 +2,23 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ApprenantRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
-<<<<<<< HEAD
- * @ApiResource()
-=======
  * @ApiResource(* attributes={
 * "security"="is_granted('ROLE_ADMIN')",
 * "security_message"="Vous n'avez pas access à cette Ressource"
 * }
 )
->>>>>>> master
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
 class Apprenant
@@ -26,68 +27,89 @@ class Apprenant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le prénom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 80,
+     *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * 
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 80,
+     *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le mail ne doit pas être vide")
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "L'mail ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Assert\Email(
+     *     message = "L'adresse '{{ value }}' n'est pas un email valide."
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le numero de telephone ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 9,
+     *      max = 25,
+     *      minMessage = "Le numero de telephone doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le numero de telephone doit pas dépasser {{ limit }} charactères"
+     * )
+     * 
      */
     private $tel;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $avatar;
-
-    /**
-<<<<<<< HEAD
-     * @ORM\ManyToOne(targetEntity=profilDeSortie::class, inversedBy="apprenants")
-     */
-    private $profildesortie;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="apprenants")
-     */
-    private $competence;
-=======
      * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
+     * @Groups({"promo:read"})
      */
     private $Groupe;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
-     */
-    private $profilDeSortie;
 
     /**
      * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
      */
     private $Promo;
 
->>>>>>> master
+    /**
+     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $profildesortie;
+
+    /**
+     * @ORM\Column(type="blob")
+     * @Assert\NotBlank(message="L'avatar ne doit pas être vide")
+     */
+    private $avatar;
+
 
     public function __construct()
     {
         $this->competence = new ArrayCollection();
-<<<<<<< HEAD
-=======
         $this->Groupe = new ArrayCollection();
->>>>>>> master
     }
 
     public function getId(): ?int
@@ -143,52 +165,7 @@ class Apprenant
         return $this;
     }
 
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): self
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-<<<<<<< HEAD
-    public function getProfildesortie(): ?profilDeSortie
-=======
-    public function getProfildesortie(): ?ProfilDeSortie
->>>>>>> master
-    {
-        return $this->profildesortie;
-    }
-
-<<<<<<< HEAD
-    public function setProfildesortie(?profilDeSortie $profildesortie): self
-=======
-    public function setProfildesortie(?ProfilDeSortie $profildesortie): self
->>>>>>> master
-    {
-        $this->profildesortie = $profildesortie;
-
-        return $this;
-    }
-
     /**
-<<<<<<< HEAD
-     * @return Collection|Competence[]
-     */
-    public function getCompetence(): Collection
-    {
-        return $this->competence;
-    }
-
-    public function addCompetence(Competence $competence): self
-    {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
-=======
      * @return Collection|Groupe[]
      */
     public function getGroupe(): Collection
@@ -200,29 +177,19 @@ class Apprenant
     {
         if (!$this->Groupe->contains($groupe)) {
             $this->Groupe[] = $groupe;
->>>>>>> master
         }
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function removeCompetence(Competence $competence): self
-    {
-        if ($this->competence->contains($competence)) {
-            $this->competence->removeElement($competence);
-=======
     public function removeGroupe(Groupe $groupe): self
     {
         if ($this->Groupe->contains($groupe)) {
             $this->Groupe->removeElement($groupe);
->>>>>>> master
         }
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
     public function getPromo(): ?Promo
     {
@@ -235,5 +202,28 @@ class Apprenant
 
         return $this;
     }
->>>>>>> master
+
+    public function getProfildesortie(): ?ProfilDeSortie
+    {
+        return $this->profildesortie;
+    }
+
+    public function setProfildesortie(?ProfilDeSortie $profildesortie): self
+    {
+        $this->profildesortie = $profildesortie;
+
+        return $this;
+    }
+
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar($avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
 }

@@ -7,6 +7,10 @@ use App\Repository\ProfilDeSortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -23,15 +27,18 @@ class ProfilDeSortie
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Le libelle ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $libelle;
 
     /**
-<<<<<<< HEAD
      * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profildesortie")
-=======
-     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profilDeSortie")
->>>>>>> master
      */
     private $apprenants;
 
@@ -69,11 +76,7 @@ class ProfilDeSortie
     {
         if (!$this->apprenants->contains($apprenant)) {
             $this->apprenants[] = $apprenant;
-<<<<<<< HEAD
             $apprenant->setProfildesortie($this);
-=======
-            $apprenant->setProfilDeSortie($this);
->>>>>>> master
         }
 
         return $this;
@@ -84,20 +87,14 @@ class ProfilDeSortie
         if ($this->apprenants->contains($apprenant)) {
             $this->apprenants->removeElement($apprenant);
             // set the owning side to null (unless already changed)
-<<<<<<< HEAD
             if ($apprenant->getProfildesortie() === $this) {
                 $apprenant->setProfildesortie(null);
-=======
-            if ($apprenant->getProfilDeSortie() === $this) {
-                $apprenant->setProfilDeSortie(null);
->>>>>>> master
             }
         }
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> master
+    
+
 }

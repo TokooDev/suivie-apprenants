@@ -5,34 +5,53 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\NiveauEvaluationRepository;
+use App\Repository\NiveauDevaluationRepository;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=NiveauEvaluationRepository::class)
+ * @ORM\Entity(repositoryClass=NiveauDevaluationRepository::class)
  */
-class NiveauEvaluation
+class NiveauDevaluation
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"groupecomp:read","compgetid:read","compget:read"})
+     * @Groups({"groupecomp:read","compgetid:read","compget:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"groupecomp:read","compgetid:read","compget:read"})
+     *  @Assert\NotBlank(message="L'action ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 10,
+     *      max = 100,
+     *      minMessage = "L'action doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "L'action ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Groups({"groupecomp:read","compgetid:read","compget:write"})
      */
     private $actions;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"groupecomp:read","compgetid:read","compget:read"})
+     *  @Assert\NotBlank(message="La critere ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 100,
+     *      max = 255,
+     *      minMessage = "La critere doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le critere ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Groups({"groupecomp:read","compgetid:read","compget:write"})
      */
     private $critere;
 
@@ -87,7 +106,7 @@ class NiveauEvaluation
     {
         if (!$this->competences->contains($competence)) {
             $this->competences[] = $competence;
-            $competence->addNiveauEvaluation($this);
+            $competence->addNiveauDevaluation($this);
         }
 
         return $this;
@@ -97,7 +116,7 @@ class NiveauEvaluation
     {
         if ($this->competences->contains($competence)) {
             $this->competences->removeElement($competence);
-            $competence->removeNiveauEvaluation($this);
+            $competence->removeNiveauDevaluation($this);
         }
 
         return $this;

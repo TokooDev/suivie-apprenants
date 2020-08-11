@@ -1,19 +1,16 @@
 <?php
 
 namespace App\Entity;
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
-<<<<<<< HEAD
- * @ApiResource() 
-=======
  * @ApiResource(
  * collectionOperations={
  *      "create"={
@@ -23,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * }
  * }
  * )
->>>>>>> master
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
@@ -37,65 +33,92 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Le username ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le username ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le username ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $username;
 
-<<<<<<< HEAD
-    /**
-     * @ORM\Column(type="json")
-     */
-=======
->>>>>>> master
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Le password ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 4,
+     *      max = 8,
+     *      minMessage = "Le password ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le password ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * 
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le prenom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le prenom ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le prenom ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le nom ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Le nom ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le mail ne doit pas être vide")
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "L'mail ne doit pas dépasser {{ limit }} charactères"
+     * )
+     * @Assert\Email(
+     *     message = "L'adresse '{{ value }}' n'est pas un email valide."
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le numero de telephone ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 9,
+     *      max = 25,
+     *      minMessage = "Le numero de telephone doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le numero de telephone doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $tel;
 
     /**
-<<<<<<< HEAD
-     * @ORM\Column(type="string", length=255)
-     */
-    private $avatar;
-
-    /**
-=======
->>>>>>> master
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $profil;
 
-<<<<<<< HEAD
-=======
     /**
      * @ORM\Column(type="blob")
      */
     private $Avatar;
 
->>>>>>> master
     public function getId(): ?int
     {
         return $this->id;
@@ -125,11 +148,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-<<<<<<< HEAD
-        $roles[] = 'ROLE_USER';
-=======
         $roles[] = 'ROLE_'.$this->profil->getLibelle();
->>>>>>> master
 
         return array_unique($roles);
     }
@@ -221,16 +240,6 @@ class User implements UserInterface
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getAvatar(): ?string
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar(string $avatar): self
-    {
-        $this->avatar = $avatar;
-=======
 
     public function getProfil(): ?Profil
     {
@@ -240,21 +249,10 @@ class User implements UserInterface
     public function setProfil(?Profil $profil): self
     {
         $this->profil = $profil;
->>>>>>> master
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function getProfil(): ?Profil
-    {
-        return $this->profil;
-    }
-
-    public function setProfil(?Profil $profil): self
-    {
-        $this->profil = $profil;
-=======
     public function getAvatar()
     {
         return $this->Avatar;
@@ -263,7 +261,6 @@ class User implements UserInterface
     public function setAvatar($Avatar): self
     {
         $this->Avatar = $Avatar;
->>>>>>> master
 
         return $this;
     }

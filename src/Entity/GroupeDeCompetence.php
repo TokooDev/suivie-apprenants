@@ -5,10 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupeCompetenceRepository;
+use App\Repository\GroupeDeCompetenceRepository;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -20,11 +24,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "path"="/admin/grpecompetences",  
  *              "normalization_context"={"groups"={"groupecomp:read"}},  
  *          }, 
- *      "getGrpcompetenceCompetences"={
+ *      "getGrpcompCompetences"={
  *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
  *              "security_message"="ACCES REFUSE",
  *              "method"="GET",
- *              "path"="admin/grpecompetences/competences", 
+ *              "path"="/admin/grpecompetences/competences", 
  *              "normalization_context"={"groups"={"groupecompcomp:read"}},
  *                 
  *          }, 
@@ -62,9 +66,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }, 
  * },
  * )
- * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
+ * @ORM\Entity(repositoryClass=GroupeDeCompetenceRepository::class)
  */
-class GroupeCompetence
+class GroupeDeCompetence
 {
     /**
      * @ORM\Id()
@@ -76,15 +80,30 @@ class GroupeCompetence
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Le libelle ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      *  @Groups({"groupecomp:read","groupecompcomp:read"})
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "La description doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le description ne doit pas dépasser {{ limit }} charactères"
+     * )
      * @Groups({"groupecomp:read", "groupecompcomp:read"})
+     * 
      */
-    private $descriptif;
+    private $description;
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="groupeDeCompetences")
@@ -110,26 +129,26 @@ class GroupeCompetence
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(?string $libele): self
+    public function setLibelle(?string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
 
-    public function getDescriptif(): ?string
+    public function getDescription(): ?string
     {
-        return $this->descriptif;
+        return $this->description;
     }
 
-    public function setDescriptif(?string $descriptif): self
+    public function setDescription(?string $description): self
     {
-        $this->descriptif = $descriptif;
+        $this->description = $description;
 
         return $this;
     }

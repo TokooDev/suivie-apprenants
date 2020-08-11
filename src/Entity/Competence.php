@@ -2,18 +2,6 @@
 
 namespace App\Entity;
 
-<<<<<<< HEAD
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CompetenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=CompetenceRepository::class)
- */
-=======
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CompetenceRepository;
 use Doctrine\Common\Collections\Collection;
@@ -21,7 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ApiResource(
  * collectionOperations={
@@ -37,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "security_message"="ACCES REFUSE",
  *              "method"="POST",
  *              "path"="/admin/competences", 
- *              "normalization_context"={"groups"={"compget:read"}},
+ *              "normalization_context"={"groups"={"compget:write"}},
  *                 
  *          }, 
  *                 
@@ -63,71 +51,59 @@ use Symfony\Component\Serializer\Annotation\Groups;
 * )
 * @ORM\Entity(repositoryClass=CompetenceRepository::class)
 */
->>>>>>> master
 class Competence
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-=======
-     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
->>>>>>> master
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:write","compgetid:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
-     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
->>>>>>> master
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:write","compgetid:read"})
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Le libelle ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
-<<<<<<< HEAD
-=======
-     * @Groups({"groupecomp:read","groupecompcomp:read","compget:read","compgetid:read"})
->>>>>>> master
+     * @Groups({"groupecomp:read","groupecompcomp:read","compget:write","compgetid:read"})
+     * @Assert\NotBlank(message="La description ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 80,
+     *      minMessage = "La description doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le description ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $description;
 
     /**
-<<<<<<< HEAD
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="competence")
-     */
-    private $apprenants;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="competences")
-     */
-    private $tag;
-
-    public function __construct()
-    {
-        $this->apprenants = new ArrayCollection();
-        $this->tag = new ArrayCollection();
-=======
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, inversedBy="competences")
      * @ApiSubresource
      */
     private $groupeDeCompetence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=NiveauEvaluation::class, inversedBy="competences")
+     * @ORM\ManyToMany(targetEntity=NiveauDevaluation::class, inversedBy="competences")
      * @ApiSubresource
-     * @Groups({"groupecomp:read","compget:read","compgetid:read"})
+     * @Groups({"groupecomp:read","compget:write","compgetid:read"})
      */
-    private $NiveauEvaluation;
+    private $NiveauDevaluation;
 
     public function __construct()
     {
         $this->groupeDeCompetence = new ArrayCollection();
-        $this->NiveauEvaluation = new ArrayCollection();
->>>>>>> master
+        $this->NiveauDevaluation = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,20 +136,6 @@ class Competence
     }
 
     /**
-<<<<<<< HEAD
-     * @return Collection|Apprenant[]
-     */
-    public function getApprenants(): Collection
-    {
-        return $this->apprenants;
-    }
-
-    public function addApprenant(Apprenant $apprenant): self
-    {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->addCompetence($this);
-=======
      * @return Collection|GroupeCompetence[]
      */
     public function getGroupeDeCompetence(): Collection
@@ -185,71 +147,41 @@ class Competence
     {
         if (!$this->groupeDeCompetence->contains($groupeDeCompetence)) {
             $this->groupeDeCompetence[] = $groupeDeCompetence;
->>>>>>> master
         }
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function removeApprenant(Apprenant $apprenant): self
-    {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            $apprenant->removeCompetence($this);
-=======
     public function removeGroupeDeCompetence(GroupeCompetence $groupeDeCompetence): self
     {
         if ($this->groupeDeCompetence->contains($groupeDeCompetence)) {
             $this->groupeDeCompetence->removeElement($groupeDeCompetence);
->>>>>>> master
         }
 
         return $this;
     }
 
     /**
-<<<<<<< HEAD
-     * @return Collection|Tag[]
+     * @return Collection|NiveauDevaluation[]
      */
-    public function getTag(): Collection
+    public function getNiveauDevaluation(): Collection
     {
-        return $this->tag;
+        return $this->NiveauDevaluation;
     }
 
-    public function addTag(Tag $tag): self
+    public function addNiveauDevaluation(NiveauDevaluation $NiveauDevaluation): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
-=======
-     * @return Collection|NiveauEvaluation[]
-     */
-    public function getNiveauEvaluation(): Collection
-    {
-        return $this->NiveauEvaluation;
-    }
-
-    public function addNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
-    {
-        if (!$this->NiveauEvaluation->contains($niveauEvaluation)) {
-            $this->NiveauEvaluation[] = $niveauEvaluation;
->>>>>>> master
+        if (!$this->NiveauDevaluation->contains($NiveauDevaluation)) {
+            $this->NiveauDevaluation[] = $NiveauDevaluation;
         }
 
         return $this;
     }
 
-<<<<<<< HEAD
-    public function removeTag(Tag $tag): self
+    public function removeNiveauDevaluation(NiveauDevaluation $NiveauDevaluation): self
     {
-        if ($this->tag->contains($tag)) {
-            $this->tag->removeElement($tag);
-=======
-    public function removeNiveauEvaluation(NiveauEvaluation $niveauEvaluation): self
-    {
-        if ($this->NiveauEvaluation->contains($niveauEvaluation)) {
-            $this->NiveauEvaluation->removeElement($niveauEvaluation);
->>>>>>> master
+        if ($this->NiveauDevaluation->contains($NiveauDevaluation)) {
+            $this->NiveauDevaluation->removeElement($NiveauDevaluation);
         }
 
         return $this;

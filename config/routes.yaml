@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-Authentification_token:
-    path:     api/login
-    methods:  ['POST']
-=======
 create:
   path: /api/users
   controller: App\Controller\UserController::addUser
@@ -15,4 +7,3 @@ authentification_token:
   path: /api/login
   methods: ['POST']
 
->>>>>>> master

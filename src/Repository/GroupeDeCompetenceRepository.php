@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\GroupeTag;
+use App\Entity\GroupeDeCompetence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method GroupeTag|null find($id, $lockMode = null, $lockVersion = null)
- * @method GroupeTag|null findOneBy(array $criteria, array $orderBy = null)
- * @method GroupeTag[]    findAll()
- * @method GroupeTag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method GroupeDeCompetence|null find($id, $lockMode = null, $lockVersion = null)
+ * @method GroupeDeCompetence|null findOneBy(array $criteria, array $orderBy = null)
+ * @method GroupeDeCompetence[]    findAll()
+ * @method GroupeDeCompetence[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroupeTagRepository extends ServiceEntityRepository
+class GroupeDeCompetenceRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, GroupeTag::class);
+        parent::__construct($registry, GroupeDeCompetence::class);
     }
 
     // /**
-    //  * @return GroupeTag[] Returns an array of GroupeTag objects
+    //  * @return GroupeDeCompetence[] Returns an array of GroupeDeCompetence objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class GroupeTagRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?GroupeTag
+    public function findOneBySomeField($value): ?GroupeCompetence
     {
         return $this->createQueryBuilder('g')
             ->andWhere('g.exampleField = :val')

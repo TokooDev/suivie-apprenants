@@ -7,12 +7,12 @@ use App\Repository\ProfilRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
-<<<<<<< HEAD
- * @ApiResource()
- * @ORM\Entity(repositoryClass=ProfilRepository::class)
-=======
  * @ApiResource(
  * collectionOperations = {
  *      "getProfils" = {
@@ -29,7 +29,6 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
  *
->>>>>>> master
  */
 class Profil
 {
@@ -42,6 +41,13 @@ class Profil
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 100,
+     *      minMessage = "Le libelle ne doit avoir au moins {{ limit }} charactères",
+     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
+     * )
      */
     private $libelle;
 
