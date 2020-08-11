@@ -20,7 +20,11 @@ class NiveauDevaluationRepository extends ServiceEntityRepository
     }
 
     // /**
+<<<<<<< HEAD
     //  * @return NiveauEvaluation[] Returns an array of NiveauEvaluation objects
+=======
+    //  * @return NiveauDevaluation[] Returns an array of NiveauDevaluation objects
+>>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +41,11 @@ class NiveauDevaluationRepository extends ServiceEntityRepository
     */
 
     /*
+<<<<<<< HEAD
     public function findOneBySomeField($value): ?NiveauEvaluation
+=======
+    public function findOneBySomeField($value): ?NiveauDevaluation
+>>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.exampleField = :val')

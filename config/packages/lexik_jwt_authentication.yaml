@@ -3,6 +3,9 @@ lexik_jwt_authentication:
     public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
     pass_phrase: '%env(JWT_PASSPHRASE)%'
 <<<<<<< HEAD
+<<<<<<< HEAD
     token_ttl: 3600
 =======
 >>>>>>> diouf
+=======
+>>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1

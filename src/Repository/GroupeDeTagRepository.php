@@ -20,7 +20,11 @@ class GroupeDeTagRepository extends ServiceEntityRepository
     }
 
     // /**
+<<<<<<< HEAD
     //  * @return GroupeTag[] Returns an array of GroupeTag objects
+=======
+    //  * @return GroupeDeTag[] Returns an array of GroupeDeTag objects
+>>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     //  */
     /*
     public function findByExampleField($value)

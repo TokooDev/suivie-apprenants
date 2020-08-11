@@ -2,13 +2,6 @@
 
 namespace App\Entity;
 
-<<<<<<< HEAD
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-=======
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ApprenantRepository;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
->>>>>>> diouf
 
 /**
  * @ApiResource(* attributes={
@@ -35,17 +27,12 @@ class Apprenant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-=======
      * 
->>>>>>> diouf
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
      * @Assert\NotBlank(message="Le prénom ne doit pas être vide")
      * @Assert\Length(
      *      min = 3,
@@ -54,14 +41,11 @@ class Apprenant
      *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
      * )
      * 
->>>>>>> diouf
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
      * @Assert\NotBlank(message="Le nom ne doit pas être vide")
      * @Assert\Length(
      *      min = 3,
@@ -69,14 +53,11 @@ class Apprenant
      *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
      * )
->>>>>>> diouf
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
      * @Assert\NotBlank(message="Le mail ne doit pas être vide")
      * @Assert\Length(
      *      max = 255,
@@ -85,14 +66,11 @@ class Apprenant
      * @Assert\Email(
      *     message = "L'adresse '{{ value }}' n'est pas un email valide."
      * )
->>>>>>> diouf
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-<<<<<<< HEAD
-=======
      * @Assert\NotBlank(message="Le numero de telephone ne doit pas être vide")
      * @Assert\Length(
      *      min = 9,
@@ -101,31 +79,10 @@ class Apprenant
      *      maxMessage = "Le numero de telephone doit pas dépasser {{ limit }} charactères"
      * )
      * 
->>>>>>> diouf
      */
     private $tel;
 
     /**
-<<<<<<< HEAD
-     * @ORM\Column(type="string", length=255)
-     */
-    private $avatar;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
-     */
-    private $Groupe;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=ProfilDeSortie::class, inversedBy="apprenants")
-     */
-    private $profilDeSortie;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Promo::class, inversedBy="apprenants")
-     */
-    private $Promo;
-=======
      * @ORM\ManyToMany(targetEntity=Groupe::class, inversedBy="apprenants")
      * @Groups({"promo:read"})
      */
@@ -147,7 +104,6 @@ class Apprenant
      * @Assert\NotBlank(message="L'avatar ne doit pas être vide")
      */
     private $avatar;
->>>>>>> diouf
 
 
     public function __construct()
@@ -209,7 +165,6 @@ class Apprenant
         return $this;
     }
 
-<<<<<<< HEAD
     public function getAvatar(): ?string
     {
         return $this->avatar;
@@ -234,8 +189,6 @@ class Apprenant
         return $this;
     }
 
-=======
->>>>>>> diouf
     /**
      * @return Collection|Groupe[]
      */
@@ -273,8 +226,6 @@ class Apprenant
 
         return $this;
     }
-<<<<<<< HEAD
-=======
 
     public function getProfildesortie(): ?ProfilDeSortie
     {
@@ -299,5 +250,4 @@ class Apprenant
 
         return $this;
     }
->>>>>>> diouf
 }
