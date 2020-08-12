@@ -124,7 +124,7 @@ class Promo
      *      minMessage = "La langue doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "La langue ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({""grpe:read",promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read","promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $langue;
 
@@ -160,7 +160,7 @@ class Promo
      *      minMessage = "Le lieu doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le lieu ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"grpe:read",promo:read","promo:write","modifierPromoEtReferentiel:write"})
+     * @Groups({"grpe:read","promo:read","promo:write","modifierPromoEtReferentiel:write"})
      */
     private $lieu;
 
