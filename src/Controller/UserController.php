@@ -17,11 +17,7 @@ class UserController extends AbstractController
          
         $User_json = $request->request->all();
         $image = $request->files->get("avatar");
-<<<<<<< HEAD
         $User = $serialize -> denormalize($User_json,"App\Entity\User",true);
-=======
-        $User = $serialize ->denormalize($User_json,"App\Entity\User",true);
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
         $image = fopen($image->getRealPath(),"rb");
         $User -> setAvatar($image);
         $password = $User -> getPassword();
@@ -33,8 +29,4 @@ class UserController extends AbstractController
 
         
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1

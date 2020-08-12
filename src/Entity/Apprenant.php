@@ -13,10 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
 /**
- * @ApiResource(* attributes={
-* "security"="is_granted('ROLE_ADMIN')",
-* "security_message"="Vous n'avez pas access à cette Ressource"
-* }
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
 class Apprenant
