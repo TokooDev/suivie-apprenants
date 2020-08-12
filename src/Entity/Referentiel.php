@@ -2,92 +2,19 @@
 
 namespace App\Entity;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ReferentielRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-=======
-=======
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ReferentielRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-<<<<<<< HEAD
-=======
-use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Annotation\ApiSubresource;
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
-<<<<<<< HEAD
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints as Assert;
->>>>>>> diouf
 
 /**
  * @ApiResource()
-=======
-
-/**
- * @ApiResource(
- * 
- *      collectionOperations={
- *          "getReferentiel"={
- *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *              "security_message"="ACCES REFUSE",
- *              "method"="GET",
- *              "path"="/admin/referentiels",
- *              "normalization_context"={"groups"={"ref_grpe:read"}}, 
- *          }, 
- *          "getGC"={
- *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *              "security_message"="ACCES REFUSE",
- *              "method"="GET",
- *              "path"="/admin/referentiels/groupecompetences",
- *              "normalization_context"={"groups"={"competence:read"}},  
- *   
- *          }, 
- *         "getGroupCompetence"={
- *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *              "security_message"="ACCES REFUSE",
- *              "method"= "POST",
- *              "path"= "/admin/referentiels", 
- *              "normalization_context"={"groups"={"affiGr:write"}},  
- *      },
- *         
- *      }, 
- * itemOperations={
- * 
- *      "getGroup"={
- *          "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
- *          "security_message"="ACCES REFUSE",
- *          "method"= "GET",
- *          "path"= "/admin/referentiels/{id}", 
- *          "normalization_context"={"groups"={"afficherGr:read"}},  
- *      },
- *      "getCompetenceGroupe"={
- *          "method"= "GET",
- *          "path"= "/admin/referentiels/{id}/groupecompetences/{id_g}",
- *          "normalization_context"={"groups"={"grpco:read"}},   
- *      },
- *      "ajoutgrpeCompetence"={
- *             "method"="PUT",
- *             "path" = "/admin/referentiels/{id}",
- *             "normalization_context"={"groups"={"grpcom:write"}},
- *      },
- *      "delete_profil"={
- *             "method"="DELETE",
- *             "path" = "/admin/referentiels/{id}",
- *      },
- *
- * },)
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
  * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
 class Referentiel
@@ -96,62 +23,16 @@ class Referentiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
      * @Groups({"promo:read"})
->>>>>>> diouf
-=======
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     *
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-<<<<<<< HEAD
-<<<<<<< HEAD
-     */
-    private $libele;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $presentation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $programme;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $critereEvaluation;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $critereAdmission;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Promo::class, inversedBy="referentiels")
-     */
-    private $Promo;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
-     */
-    private $groupeDeCompetences;
-=======
-=======
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
      * @Assert\NotBlank(message="Le libelle ne doit pas être vide")
      * @Assert\Length(
      *      min = 10,
      *      max = 255,
-<<<<<<< HEAD
      *      minMessage = "La libelle ne doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
      * )
@@ -172,31 +53,6 @@ class Referentiel
     private $programme;
 
 
-=======
-     *      minMessage = "Le libelle doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "Le libelle ne doit pas dépasser {{ limit }} charactères"
-     * )
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     * 
-     */
-    private $libelle;
-
-    
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank(message="Le programme ne doit pas être vide")
-     * @Assert\Length(
-     *      min = 50,
-     *      max = 255,
-     *      minMessage = "Le programme doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "Le programme ne doit pas dépasser {{ limit }} charactères"
-     * )
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
-     * 
-     */
-    private $programme;
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     /**
      * @ORM\ManyToMany(targetEntity=Promo::class, inversedBy="referentiels")
      */
@@ -204,7 +60,6 @@ class Referentiel
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeDeCompetence::class, inversedBy="referentiels")
-<<<<<<< HEAD
      */
     private $groupeDeCompetences;
 
@@ -216,29 +71,10 @@ class Referentiel
      *      
      *      minMessage = "La presentation ne doit avoir au moins {{ limit }} charactères",
      *  )    
-=======
-     * @ApiSubresource
-     * @Groups({"ref_grpe:read","competence:read","grpco:read","grpcom:write","afficherGr:read","affiGr:write"})
-     * 
-     */
-    private $GroupeCompetence;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     * @Assert\NotBlank(message="La presentation ne doit pas être vide")
-     * @Assert\Length(
-     *      min = 10,
-     *      max = 255,
-     *      minMessage = "La presentation doit avoir au moins {{ limit }} charactères",
-     *      maxMessage = "La presentation ne doit pas dépasser {{ limit }} charactères"
-     * )
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
      */
     private $presentation;
 
     /**
-<<<<<<< HEAD
      * @ORM\Column(type="text")
      *  @Assert\NotBlank(message="Le critere d'evaluation ne doit pas être vide")
      * @Assert\Length(
@@ -246,22 +82,10 @@ class Referentiel
      *      
      *      minMessage = "le critere d'evaluation ne doit avoir au moins {{ limit }} charactères",
      *  )    
-=======
-     * @ORM\Column(type="text", nullable=true)
-     * @Assert\NotBlank(message="Le criter d'evaluation ne doit pas être vide")
-     * @Assert\Length(
-     *      min = 50,
-     *      
-     *      minMessage = "Le criter d'evaluation doit avoir au moins {{ limit }} charactères",
-     *     
-     * )
-     * @Groups({"ref_grpe:read","grpe:read","promo:read"})
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
      */
     private $critereEvaluation;
 
     /**
-<<<<<<< HEAD
      * @ORM\Column(type="text")
      *  @Assert\NotBlank(message="Le critere d'admission ne doit pas être vide")
      * @Assert\Length(
@@ -271,27 +95,11 @@ class Referentiel
      *  )    
      */
     private $critereAdmission;
->>>>>>> diouf
-=======
-     * @ORM\Column(type="text", nullable=true)
-     * @Assert\NotBlank(message="Le critere d'admission ne doit pas être vide")
-     * @Assert\Length(
-     *      min = 50,
-     *      minMessage = "Le critere d'admission doit avoir au moins {{ limit }} charactères",
-     *     
-     * )
-     */
-    private $critereAdmission;
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 
     public function __construct()
     {
         $this->Promo = new ArrayCollection();
-<<<<<<< HEAD
         $this->groupeDeCompetences = new ArrayCollection();
-=======
-        $this->GroupeCompetence = new ArrayCollection();
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     }
 
     public function getId(): ?int
@@ -299,29 +107,6 @@ class Referentiel
         return $this->id;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public function getLibele(): ?string
-    {
-        return $this->libele;
-    }
-
-    public function setLibele(?string $libele): self
-    {
-        $this->libele = $libele;
-
-        return $this;
-    }
-
-    public function getPresentation(): ?string
-    {
-        return $this->presentation;
-    }
-
-    public function setPresentation(?string $presentation): self
-    {
-        $this->presentation = $presentation;
-=======
     public function getlibelle(): ?string
     {
         return $this->libelle;
@@ -330,26 +115,10 @@ class Referentiel
     public function setlibelle(?string $libelle): self
     {
         $this->libelle = $libelle;
->>>>>>> diouf
-=======
-    public function getLibele(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibele(?string $libelle): self
-    {
-        $this->libelle = $libelle;
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 
         return $this;
     }
 
-<<<<<<< HEAD
-=======
-   
-
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     public function getProgramme(): ?string
     {
         return $this->programme;
@@ -361,41 +130,6 @@ class Referentiel
 
         return $this;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-    public function getCritereEvaluation(): ?string
-    {
-        return $this->critereEvaluation;
-    }
-
-    public function setCritereEvaluation(?string $critereEvaluation): self
-    {
-        $this->critereEvaluation = $critereEvaluation;
-
-        return $this;
-    }
-
-    public function getCritereAdmission(): ?string
-    {
-        return $this->critereAdmission;
-    }
-
-    public function setCritereAdmission(?string $critereAdmission): self
-    {
-        $this->critereAdmission = $critereAdmission;
-
-        return $this;
-    }
-
-=======
->>>>>>> diouf
-=======
-
-   
-   
-
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     /**
      * @return Collection|Promo[]
      */
@@ -425,7 +159,6 @@ class Referentiel
     /**
      * @return Collection|GroupeCompetence[]
      */
-<<<<<<< HEAD
     public function getGroupeDeCompetences(): Collection
     {
         return $this->groupeDeCompetences;
@@ -435,53 +168,26 @@ class Referentiel
     {
         if (!$this->groupeDeCompetences->contains($groupeDeCompetence)) {
             $this->groupeDeCompetences[] = $groupeDeCompetence;
-=======
-    public function getGroupeCompetence(): Collection
-    {
-        return $this->GroupeCompetence;
-    }
-
-    public function addGroupeCompetence(GroupeCompetence $groupeCompetence): self
-    {
-        if (!$this->GroupeCompetence->contains($groupeCompetence)) {
-            $this->GroupeCompetence[] = $groupeCompetence;
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
         }
 
         return $this;
     }
 
-<<<<<<< HEAD
     public function removeGroupeDeCompetence(GroupeCompetence $groupeDeCompetence): self
     {
         if ($this->groupeDeCompetences->contains($groupeDeCompetence)) {
             $this->groupeDeCompetences->removeElement($groupeDeCompetence);
-=======
-    public function removeGroupeCompetence(GroupeCompetence $groupeCompetence): self
-    {
-        if ($this->GroupeCompetence->contains($groupeCompetence)) {
-            $this->GroupeCompetence->removeElement($groupeCompetence);
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
         }
 
         return $this;
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 
     public function getPresentation(): ?string
     {
         return $this->presentation;
     }
 
-<<<<<<< HEAD
     public function setPresentation(string $presentation): self
-=======
-    public function setPresentation(?string $presentation): self
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     {
         $this->presentation = $presentation;
 
@@ -493,11 +199,7 @@ class Referentiel
         return $this->critereEvaluation;
     }
 
-<<<<<<< HEAD
     public function setCritereEvaluation(string $critereEvaluation): self
-=======
-    public function setCritereEvaluation(?string $critereEvaluation): self
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     {
         $this->critereEvaluation = $critereEvaluation;
 
@@ -509,18 +211,10 @@ class Referentiel
         return $this->critereAdmission;
     }
 
-<<<<<<< HEAD
     public function setCritereAdmission(string $critereAdmission): self
-=======
-    public function setCritereAdmission(?string $critereAdmission): self
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
     {
         $this->critereAdmission = $critereAdmission;
 
         return $this;
     }
-<<<<<<< HEAD
->>>>>>> diouf
-=======
->>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
 }

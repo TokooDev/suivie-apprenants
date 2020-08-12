@@ -23,6 +23,7 @@ class GroupeDeCompetenceRepository extends ServiceEntityRepository
     //  * @return GroupeDeCompetence[] Returns an array of GroupeDeCompetence objects
     //  */
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*
     public function findByExampleField($value)
     {
@@ -34,15 +35,25 @@ class GroupeDeCompetenceRepository extends ServiceEntityRepository
 =======
     
     public function getGrpeCompetencesRefs()
+=======
+    /*
+    public function findByExampleField($value)
+>>>>>>> e27215435756dbc4cdd6dea62908b5cb8c82b04f
     {
         return $this->createQueryBuilder('g')
-            ->innerJoin('g.referentiels', 'r')
+            ->andWhere('g.exampleField = :val')
+            ->setParameter('val', $value)
             ->orderBy('g.id', 'ASC')
+<<<<<<< HEAD
 >>>>>>> 2af2bb0868223ba559c4e87939da475f02f602a1
+=======
+            ->setMaxResults(10)
+>>>>>>> e27215435756dbc4cdd6dea62908b5cb8c82b04f
             ->getQuery()
             ->getResult()
         ;
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
     */
 
@@ -50,6 +61,9 @@ class GroupeDeCompetenceRepository extends ServiceEntityRepository
     public function findOneBySomeField($value): ?GroupeCompetence
 =======
     
+=======
+    */
+>>>>>>> e27215435756dbc4cdd6dea62908b5cb8c82b04f
 
     /*
     public function findOneBySomeField($value): ?GroupeDeCompetence

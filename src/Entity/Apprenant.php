@@ -1,24 +1,22 @@
 <?php
 
 namespace App\Entity;
-
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ApprenantRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * @ApiResource(* attributes={
 * "security"="is_granted('ROLE_ADMIN')",
 * "security_message"="Vous n'avez pas access à cette Ressource"
 * }
-)
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
 class Apprenant
@@ -27,7 +25,7 @@ class Apprenant
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * 
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $id;
 
@@ -40,7 +38,7 @@ class Apprenant
      *      minMessage = "Le prénom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} charactères"
      * )
-     * 
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
      */
     private $prenom;
 
@@ -53,6 +51,9 @@ class Apprenant
      *      minMessage = "Le nom doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} charactères"
      * )
+     * @Groups({"grpe:read","apfor:read","promo:read","grpPrincipal:read","afficherApprenantsGroup:read","modifierAppreantsDunePromo:write"})
+     * 
+     * 
      */
     private $nom;
 
@@ -66,12 +67,13 @@ class Apprenant
      * @Assert\Email(
      *     message = "L'adresse '{{ value }}' n'est pas un email valide."
      * )
+     * @Groups({"grpe:read","grap:read","apfor:read","promo:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le numero de telephone ne doit pas être vide")
+     * @Assert\NotBlank(message="Le numero ne doit pas être vide")
      * @Assert\Length(
      *      min = 9,
      *      max = 25,
@@ -223,30 +225,6 @@ class Apprenant
     public function setPromo(?Promo $Promo): self
     {
         $this->Promo = $Promo;
-
-        return $this;
-    }
-
-    public function getProfildesortie(): ?ProfilDeSortie
-    {
-        return $this->profildesortie;
-    }
-
-    public function setProfildesortie(?ProfilDeSortie $profildesortie): self
-    {
-        $this->profildesortie = $profildesortie;
-
-        return $this;
-    }
-
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    public function setAvatar($avatar): self
-    {
-        $this->avatar = $avatar;
 
         return $this;
     }
