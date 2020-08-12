@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  *      collectionOperations={
  *          "createTag"={
- *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security"="is_granted('ROLE_Admin') or is_granted('ROLE_Formateur')",
  *              "security_message"="ACCES REFUSE",
  *              "method"="POST",
  *              "path"="/admin/grptag",

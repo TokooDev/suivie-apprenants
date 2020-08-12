@@ -18,16 +18,11 @@ use Symfony\Component\Validator\Constraints\Length;
  *
  *      collectionOperations={
  *          "getTag"={
- *              "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_Formateur')",
+ *              "security"="is_granted('ROLE_Admin') or is_granted('ROLE_Formateur')",
  *              "security_message"="ACCES REFUSE",
  *              "method"="GET",
- *              "path"="/admin/grptag",
- *              
- * 
- * 
- *               
- *          },
- *          
+ *              "path"="/admin/grptag"           
+ *          },    
  * 
  * },
  * itemOperations={
@@ -74,6 +69,7 @@ class GroupeDeTag
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"groupetag:read"})
      * @Assert\NotBlank(message="Le libellé  ne doit pas être vide")
      * @Assert\Length(
      *      min = 50,
@@ -81,14 +77,13 @@ class GroupeDeTag
      *      minMessage = "Le libellé doit avoir au moins {{ limit }} charactères",
      *      maxMessage = "Le libellé ne doit pas dépasser {{ limit }} charactères"
      * )
-     * @Groups({"groupetag:read"})
      */
     private $libelle;
 
     /**
      *  @ApiSubresource
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="groupeDeTags")
-     * @Groups({"groupetag:read","groupetag:read"})
+     * @Groups({"groupetag:read"})
      */
     private $tags;
 
